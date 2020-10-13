@@ -13,12 +13,11 @@ import javax.persistence.Table;
 @Table(name = "secretarios")
 public class Secretario {
 
-
-	@Id
+    @Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name ="id_secretario")
 	private long id;
-		
+	
 	@Basic
 	private String nombre;
 	
@@ -32,45 +31,29 @@ public class Secretario {
 		super();
 	}
 
-
-
 	public String getNombre() {
 		return nombre;
 	}
-
-
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
 
-
-
 	public String getCedula() {
 		return cedula;
 	}
-
-
 
 	public void setCedula(String cedula) {
 		this.cedula = cedula;
 	}
 
-
-
 	public double getSueldo() {
 		return sueldo;
 	}
-
-
 
 	public void setSueldo(double sueldo) {
 		this.sueldo = sueldo;
 	}
 
-	
-	
-	
-	
 	
 }
