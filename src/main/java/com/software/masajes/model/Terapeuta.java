@@ -1,4 +1,4 @@
-package model;
+package com.software.masajes.model;
 
 import java.io.Serializable;
 

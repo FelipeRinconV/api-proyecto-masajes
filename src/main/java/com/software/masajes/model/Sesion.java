@@ -1,4 +1,4 @@
-package model;
+package com.software.masajes.model;
 
 import java.io.Serializable;
 
@@ -12,49 +12,40 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
 @Entity
-@Table(name="terapias")
-public class Terapia implements Serializable {
+@Table(name = "sesiones")
+public class Sesion implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "id_terapeuta")
-	private Terapeuta terapeuta;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id_terapia")
+	@Column(name = "id_sesion")
 	private long id;
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "id_terapia")
+	private Terapeuta terapia;
 
 	@Column(nullable = false, name = "nombre")
 	private String nombre;
 
-	@Column(nullable = false, name = "precio")
-	private double precio;
+	@Column(nullable = false, name = "duracion")
+	private int duracion;
 
-	public Terapia() {
+	public Sesion() {
 		super();
 	}
 
-	public Terapeuta getTerapeuta() {
-		return terapeuta;
+	public Terapeuta getTerapia() {
+		return terapia;
 	}
 
-	public void setTerapeuta(Terapeuta terapeuta) {
-		this.terapeuta = terapeuta;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
+	public void setTerapia(Terapeuta terapia) {
+		this.terapia = terapia;
 	}
 
 	public String getNombre() {
@@ -65,12 +56,12 @@ public class Terapia implements Serializable {
 		this.nombre = nombre;
 	}
 
-	public double getPrecio() {
-		return precio;
+	public int getDuracion() {
+		return duracion;
 	}
 
-	public void setPrecio(double precio) {
-		this.precio = precio;
+	public void setDuracion(int duracion) {
+		this.duracion = duracion;
 	}
 
 }

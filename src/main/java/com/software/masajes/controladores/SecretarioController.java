@@ -1,4 +1,4 @@
-package controller;
+package com.software.masajes.controladores;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +17,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import model.Secretario;
-import repository.SecretarioRepository;
+import com.software.masajes.model.Secretario;
+import com.software.masajes.repository.SecretarioRepository;
 
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class SecretarioController {
+
 
 	@Autowired
 	SecretarioRepository secreRepository;
@@ -33,7 +34,6 @@ public class SecretarioController {
 		try {
 			List<Secretario> secretarios = new ArrayList<Secretario>();
 
-	
 			if (secretarios.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
@@ -73,7 +73,8 @@ public class SecretarioController {
 	}
 
 	@PutMapping("/secretarios/{id}")
-	public ResponseEntity<Secretario> updateSecretario(@PathVariable("id") long id, @RequestBody Secretario secretario) {
+	public ResponseEntity<Secretario> updateSecretario(@PathVariable("id") long id,
+			@RequestBody Secretario secretario) {
 		Optional<Secretario> secretarioData = secreRepository.findById(id);
 
 		if (secretarioData.isPresent()) {
@@ -86,16 +87,17 @@ public class SecretarioController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
 
 	@DeleteMapping("/secretarios/{id}")
-	  public ResponseEntity<HttpStatus> deleteSecretario(@PathVariable("id") long id) {
-	    try {
-	      secreRepository.deleteById(id);
-	      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	    } catch (Exception e) {
-	      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
-	  }
+	public ResponseEntity<HttpStatus> deleteSecretario(@PathVariable("id") long id) {
+		try {
+			secreRepository.deleteById(id);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+		 
 
 }

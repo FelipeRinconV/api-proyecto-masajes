@@ -1,4 +1,4 @@
-package model;
+package com.software.masajes.model;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
