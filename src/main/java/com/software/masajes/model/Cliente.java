@@ -1,5 +1,6 @@
 package com.software.masajes.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -15,16 +16,24 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity
 @Table(name="clientes")
-public class Cliente {
+public class Cliente  implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_cliente")
 	private Long id;
 
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "id_secretario")
 	private Secretario secretario;
@@ -38,9 +47,8 @@ public class Cliente {
 	@Column(name = "email", nullable = false)
 	private String email;
 	
-	@Column(name = "fecha_nacimiento", updatable = false, nullable = false)
-    @Temporal(TemporalType.DATE)
-	private Date fechaNacimiento;
+    @Basic
+	private String fechaNacimiento;
 
 	@Column(name = "nombre", nullable = false)
 	private String nombre;
@@ -95,11 +103,12 @@ public class Cliente {
 		this.email = email;
 	}
 
-	public Date getFechaNacimiento() {
+	
+	public String getFechaNacimiento() {
 		return fechaNacimiento;
 	}
 
-	public void setFechaNacimiento(Date fechaNacimiento) {
+	public void setFechaNacimiento(String fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 

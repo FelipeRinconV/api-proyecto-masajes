@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.software.masajes.dto.ClientDto;
 import com.software.masajes.model.Cliente;
 import com.software.masajes.model.Secretario;
 import com.software.masajes.repository.ClienteRepository;
@@ -59,16 +60,14 @@ public class ClienteController {
 	}
 
 	@PostMapping("/clientes/{id}")
-	public ResponseEntity<Cliente> createCliente(@RequestBody Cliente cliente, @PathVariable("id")
-			long id) {
+	public ResponseEntity<Cliente> createCliente(@RequestBody ClientDto cliente, @PathVariable("id") long id) {
 		try {
 
 			Cliente clienteNuevo = new Cliente();
 			
 			Optional<Secretario> secre2 = secreRepository.findById(id); 
 			Secretario secre = (Secretario) secre2.get();
-
-			clienteNuevo.setId(cliente.getId());
+			
 			clienteNuevo.setNombre(cliente.getNombre());
 			clienteNuevo.setSecretario(secre);
 			clienteNuevo.setCedula(cliente.getCedula());
@@ -76,7 +75,7 @@ public class ClienteController {
 			clienteNuevo.setEmail(cliente.getEmail());
 			clienteNuevo.setOcupacion(cliente.getOcupacion());
 			clienteNuevo.setTelefono(cliente.getTelefono());
-			cliente.setFechaNacimiento(cliente.getFechaNacimiento());
+			clienteNuevo.setFechaNacimiento(cliente.getFecha_nacimiento());
 
 			Cliente _tutorial = clienteRepository.save(clienteNuevo);
 
@@ -88,14 +87,13 @@ public class ClienteController {
 
 	@PutMapping("/clientes/{id}")
 	public ResponseEntity<Cliente> updateCliente(@PathVariable("id") long id,
-			@RequestBody Cliente cliente) {
+			@RequestBody ClientDto cliente) {
 		Optional<Cliente> clienteData = clienteRepository.findById(id);
 
 		if (clienteData.isPresent()) {
 			Cliente clienteActualizado = clienteData.get();
 			
 			clienteActualizado.setCedula(cliente.getCedula());
-			
 			
 			return new ResponseEntity<>(clienteRepository.save(clienteActualizado), HttpStatus.OK);
 		} else {

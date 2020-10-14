@@ -1,4 +1,4 @@
-package com.software.masajes.model;
+	package com.software.masajes.model;
 
 import java.io.Serializable;
 
@@ -22,8 +22,7 @@ public class Terapeuta implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name ="id_terapeuta")
 	private long id;
-	
-	//TODO aca poner relacion con terapias
+
 
 	@Column(nullable = false, name = "cedula",length = 10)
 	private String cedula;
