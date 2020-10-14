@@ -32,7 +32,7 @@ public class SecretarioController {
 	@GetMapping("/secreatarios")
 	public ResponseEntity<List<Secretario>> getAllSecretarios() {
 		try {
-			List<Secretario> secretarios = new ArrayList<Secretario>();
+			List<Secretario> secretarios = secreRepository.findAll();
 
 			if (secretarios.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
