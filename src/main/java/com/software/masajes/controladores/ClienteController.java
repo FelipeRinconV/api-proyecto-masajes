@@ -86,18 +86,27 @@ public class ClienteController {
 	}
 
 	@PutMapping("/clientes/{id}")
-	public ResponseEntity<Cliente> updateCliente(@PathVariable("id") long id,
+	public ResponseEntity<String> updateCliente(@PathVariable("id") long id,
 			@RequestBody ClientDto cliente) {
 		Optional<Cliente> clienteData = clienteRepository.findById(id);
 
 		if (clienteData.isPresent()) {
 			Cliente clienteActualizado = clienteData.get();
-			
+
+			clienteActualizado.setNombre(cliente.getNombre());
 			clienteActualizado.setCedula(cliente.getCedula());
+			clienteActualizado.setDireccion(cliente.getDireccion());
+			clienteActualizado.setEmail(cliente.getEmail());
+			clienteActualizado.setOcupacion(cliente.getOcupacion());
+			clienteActualizado.setTelefono(cliente.getTelefono());
+			clienteActualizado.setFechaNacimiento(cliente.getFecha_nacimiento());
 			
-			return new ResponseEntity<>(clienteRepository.save(clienteActualizado), HttpStatus.OK);
+			clienteRepository.save(clienteActualizado);
+			
+			
+			return new ResponseEntity<>("Cliente actualizado", HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("El cliente no se encuetra registrado ",HttpStatus.NOT_FOUND);
 		}
 	}
 	
