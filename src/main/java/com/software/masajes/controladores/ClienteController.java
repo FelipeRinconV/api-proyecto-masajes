@@ -58,7 +58,7 @@ public class ClienteController {
 		}
 	}
 
-	@PostMapping("/clientes")
+	@PostMapping("/clientes/{id}")
 	public ResponseEntity<Cliente> createCliente(@RequestBody Cliente cliente, @PathVariable("id")
 			long id) {
 		try {
@@ -94,7 +94,8 @@ public class ClienteController {
 		if (clienteData.isPresent()) {
 			Cliente clienteActualizado = clienteData.get();
 			
-			clienteActualizado.setCedula();
+			clienteActualizado.setCedula(cliente.getCedula());
+			
 			
 			return new ResponseEntity<>(clienteRepository.save(clienteActualizado), HttpStatus.OK);
 		} else {
