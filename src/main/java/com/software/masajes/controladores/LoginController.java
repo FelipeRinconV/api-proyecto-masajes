@@ -25,7 +25,6 @@ public class LoginController {
 	@Autowired
 	EntityManager em;
 
-	
 	@GetMapping("/login")
 	public ResponseEntity<Integer> login(String email, String clave) {
 
@@ -43,10 +42,8 @@ public class LoginController {
 		} else {
 
 			TypedQuery<Terapeuta> loginTeapreuta = em.createNamedQuery(Terapeuta.LOG_TERAPEUTA, Terapeuta.class);
-
-			loginSecretario.setParameter("email", email);
-			loginSecretario.setParameter("clave", clave);
-
+			loginTeapreuta.setParameter("email", email);
+			loginTeapreuta.setParameter("clave", clave);
 			List<Terapeuta> terapeutas = loginTeapreuta.getResultList();
 
 			if (terapeutas.size() > 0) {

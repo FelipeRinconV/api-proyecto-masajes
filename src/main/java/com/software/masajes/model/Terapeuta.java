@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @NamedQueries({
 
-		@NamedQuery(name = Terapeuta.LOG_TERAPEUTA, query = "select u from Secretario u where u.email=:email and u.clave=:clave")
+		@NamedQuery(name = Terapeuta.LOG_TERAPEUTA, query = "select u from Terapeuta u where u.email=:email and u.clave=:clave")
 
 })
 
