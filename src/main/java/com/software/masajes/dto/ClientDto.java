@@ -1,25 +1,22 @@
 package com.software.masajes.dto;
 
-public class ClientDto {
-	
-	
-	private String direccion;
-	
-	private String cedula;
-	
-	private String email;
-	
-	private String fecha_nacimiento;
-	
-	private String nombre;
-	
-	private String ocupacion;
-	
-	private String telefono;
 
-	public ClientDto() {
-		super();
-	}
+
+public class ClientDto {
+
+	private String direccion;
+
+	private String cedula;
+
+	private String email;
+
+	private String fecha_nacimiento;
+
+	private String nombre;
+
+	private String ocupacion;
+
+	private String telefono;
 
 	public String getDireccion() {
 		return direccion;
@@ -27,6 +24,14 @@ public class ClientDto {
 
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
+	}
+
+	public String getCedula() {
+		return cedula;
+	}
+
+	public void setCedula(String cedula) {
+		this.cedula = cedula;
 	}
 
 	public String getEmail() {
@@ -69,15 +74,8 @@ public class ClientDto {
 		this.telefono = telefono;
 	}
 
-	public String getCedula() {
-		return cedula;
+	public ClientDto() {
+		super();
 	}
-
-	public void setCedula(String cedula) {
-		this.cedula = cedula;
-	}
-
-
-	
 
 }

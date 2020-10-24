@@ -1,28 +1,32 @@
 package com.software.masajes.dto;
 
 
-
 public class TerapeutaDto {
-	
+
+
 	private String cedula;
 
 	private String clave;
 
 	private String direccion;
-
+	
 	private String email;
 
 	private String nombre;
 
 	private String profesion;
 
+	public String getCedula() {
+		return cedula;
+	}
+	
+	
+
 	public TerapeutaDto() {
 		super();
 	}
 
-	public String getCedula() {
-		return cedula;
-	}
+
 
 	public void setCedula(String cedula) {
 		this.cedula = cedula;
@@ -67,9 +71,7 @@ public class TerapeutaDto {
 	public void setProfesion(String profesion) {
 		this.profesion = profesion;
 	}
-	
-	
-	
 
-
+	
+	
 }

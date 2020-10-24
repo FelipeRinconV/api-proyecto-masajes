@@ -1,7 +1,6 @@
 package com.software.masajes.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -13,15 +12,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
 @Entity
-@Table(name="clientes")
-public class Cliente  implements Serializable{
+@Table(name = "clientes")
+public class Cliente implements Serializable {
 
 	/**
 	 * 
@@ -33,7 +29,7 @@ public class Cliente  implements Serializable{
 	@Column(name = "id_cliente")
 	private Long id;
 
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "id_secretario")
 	private Secretario secretario;
@@ -46,8 +42,8 @@ public class Cliente  implements Serializable{
 
 	@Column(name = "email", nullable = false)
 	private String email;
-	
-    @Basic
+
+	@Basic
 	private String fechaNacimiento;
 
 	@Column(name = "nombre", nullable = false)
@@ -61,6 +57,21 @@ public class Cliente  implements Serializable{
 
 	public Cliente() {
 		super();
+
+	}
+
+	public Cliente(Long id, Secretario secretario, String cedula, String direccion, String email,
+			String fechaNacimiento, String nombre, String ocupacion, String telefono) {
+		super();
+		this.id = id;
+		this.secretario = secretario;
+		this.cedula = cedula;
+		this.direccion = direccion;
+		this.email = email;
+		this.fechaNacimiento = fechaNacimiento;
+		this.nombre = nombre;
+		this.ocupacion = ocupacion;
+		this.telefono = telefono;
 	}
 
 	public Long getId() {
@@ -103,7 +114,6 @@ public class Cliente  implements Serializable{
 		this.email = email;
 	}
 
-	
 	public String getFechaNacimiento() {
 		return fechaNacimiento;
 	}

@@ -1,4 +1,4 @@
-	package com.software.masajes.model;
+package com.software.masajes.model;
 
 import java.io.Serializable;
 
@@ -7,11 +7,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
+@NamedQueries({
+
+		@NamedQuery(name = Terapeuta.LOG_TERAPEUTA, query = "select u from Secretario u where u.email=:email and u.clave=:clave")
+
+})
 
 @Entity
 @Table(name = "terapeutas")
 public class Terapeuta implements Serializable {
+
+	public static final String LOG_TERAPEUTA = "login_terapeuta";
 
 	/**
 	 * 
@@ -20,11 +30,10 @@ public class Terapeuta implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name ="id_terapeuta")
+	@Column(name = "id_terapeuta")
 	private long id;
 
-
-	@Column(nullable = false, name = "cedula",length = 10)
+	@Column(nullable = false, name = "cedula", length = 10)
 	private String cedula;
 
 	@Column(nullable = false, name = "clave")

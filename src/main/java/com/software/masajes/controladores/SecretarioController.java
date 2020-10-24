@@ -1,6 +1,5 @@
 package com.software.masajes.controladores;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.software.masajes.dto.SecretarioDto;
 import com.software.masajes.model.Secretario;
 import com.software.masajes.repository.SecretarioRepository;
 
@@ -24,7 +24,6 @@ import com.software.masajes.repository.SecretarioRepository;
 @RestController
 @RequestMapping("/api")
 public class SecretarioController {
-
 
 	@Autowired
 	SecretarioRepository secreRepository;
@@ -55,20 +54,21 @@ public class SecretarioController {
 	}
 
 	@PostMapping("/secretarios")
-	public ResponseEntity<Secretario> createSecretario(@RequestBody Secretario secretario) {
+	public ResponseEntity<String> createSecretario(@RequestBody SecretarioDto secretario) {
 		try {
 
 			Secretario secre = new Secretario();
-
 			secre.setCedula(secretario.getCedula());
+			secre.setEmail(secretario.getEmail());
 			secre.setNombre(secretario.getNombre());
 			secre.setSueldo(secretario.getSueldo());
+			secre.setClave(secretario.getClave());
 
-			Secretario _tutorial = secreRepository.save(secre);
+			secreRepository.save(secre);
 
-			return new ResponseEntity<>(_tutorial, HttpStatus.CREATED);
+			return new ResponseEntity<>("Secretario creado satisfactoriamente", HttpStatus.CREATED);
 		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(e.getMessage()+secretario.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -97,7 +97,5 @@ public class SecretarioController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-		 
 
 }

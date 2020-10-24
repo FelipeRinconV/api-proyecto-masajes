@@ -16,12 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.software.masajes.dto.ClientDto;
 import com.software.masajes.dto.TerapeutaDto;
-import com.software.masajes.model.Cliente;
-import com.software.masajes.model.Secretario;
 import com.software.masajes.model.Terapeuta;
-import com.software.masajes.repository.ClienteRepository;
 import com.software.masajes.repository.TerapeutaRepository;
 
 @CrossOrigin(origins = "*")
@@ -31,6 +27,7 @@ public class TerapeutaController {
 
 	@Autowired
 	TerapeutaRepository terapeutaRepository;
+
 
 	@GetMapping("/terapeutas")
 	public ResponseEntity<List<Terapeuta>> getAllTerapeutas() {
@@ -73,7 +70,7 @@ public class TerapeutaController {
 
 		if (terapeutaData.isPresent()) {
 			Terapeuta terapeutaActualizado = terapeutaData.get();
-			
+
 			terapeutaActualizado.setNombre(terapeuta.getNombre());
 			terapeutaActualizado.setClave(terapeuta.getClave());
 			terapeutaActualizado.setCedula(terapeuta.getCedula());
@@ -83,9 +80,9 @@ public class TerapeutaController {
 
 			terapeutaRepository.save(terapeutaActualizado);
 
-			return new ResponseEntity<>("Terapeuta actualizado",HttpStatus.OK);
+			return new ResponseEntity<>("Terapeuta actualizado", HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>("El terepeuta no se encuentra registrado ",HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("El terepeuta no se encuentra registrado ", HttpStatus.NOT_FOUND);
 		}
 	}
 
