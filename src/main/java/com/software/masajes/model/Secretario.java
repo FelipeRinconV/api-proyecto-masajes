@@ -1,6 +1,7 @@
 package com.software.masajes.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +13,7 @@ import javax.persistence.Table;
 
 @NamedQueries({
 
- @NamedQuery(name = Secretario.LOG_SECRETARIO, query = "select u from Secretario u where u.email=:email and u.clave=:clave")
+		@NamedQuery(name = Secretario.LOG_SECRETARIO, query = "select u from Secretario u where u.email=:email and u.clave=:clave")
 
 })
 @Entity
@@ -24,15 +25,18 @@ public class Secretario implements Serializable {
 	 */
 	public static final String LOG_SECRETARIO = "numero_de_registro_por_usuario";
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_secretario")
 	private long id;
+
+	@OneToMany(mappedBy = "secretario")
+	private List<Cita> citas;
+
+	@OneToMany(mappedBy = "secretario")
+	private List<Terapia> terapias;
 
 	@Column(nullable = false)
 	private String nombre;
@@ -107,6 +111,14 @@ public class Secretario implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public List<Cita> getCitas() {
+		return citas;
+	}
+
+	public void setCitas(List<Cita> citas) {
+		this.citas = citas;
 	}
 
 }

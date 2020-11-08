@@ -1,6 +1,7 @@
 package com.software.masajes.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @NamedQueries({
@@ -32,6 +34,12 @@ public class Terapeuta implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_terapeuta")
 	private long id;
+
+	@OneToMany(mappedBy = "terapeuta")
+	private List<TerapiaTerapeuta> terapiaTerapeutas;
+
+	@OneToMany(mappedBy = "terapeuta")
+	private List<Cita> citas;
 
 	@Column(nullable = false, name = "cedula", length = 10)
 	private String cedula;
@@ -110,5 +118,23 @@ public class Terapeuta implements Serializable {
 	public void setProfesion(String profesion) {
 		this.profesion = profesion;
 	}
+
+	public List<Cita> getCitas() {
+		return citas;
+	}
+
+	public void setCitas(List<Cita> citas) {
+		this.citas = citas;
+	}
+
+	public List<TerapiaTerapeuta> getTerapiaTerapeutas() {
+		return terapiaTerapeutas;
+	}
+
+	public void setTerapiaTerapeutas(List<TerapiaTerapeuta> terapiaTerapeutas) {
+		this.terapiaTerapeutas = terapiaTerapeutas;
+	}
+
+	
 
 }
