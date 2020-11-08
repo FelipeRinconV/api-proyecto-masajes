@@ -1,6 +1,5 @@
 package com.software.masajes.controladores;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -27,16 +26,17 @@ import com.software.masajes.repository.SecretarioRepository;
 @RestController
 @RequestMapping("/api")
 public class ClienteController {
-	
+
 	@Autowired
 	ClienteRepository clienteRepository;
-	
+
 	@Autowired
 	SecretarioRepository secreRepository;
-	
+
 	@GetMapping("/clientes")
 	public ResponseEntity<List<Cliente>> getAllClientes() {
 		try {
+
 			List<Cliente> clientes = clienteRepository.findAll();
 
 			if (clientes.isEmpty()) {
@@ -48,7 +48,7 @@ public class ClienteController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@GetMapping("/clientes/{id}")
 	public ResponseEntity<Cliente> getClienteById(@PathVariable("id") long id) {
 		Optional<Cliente> tutorialData = clienteRepository.findById(id);
@@ -64,10 +64,10 @@ public class ClienteController {
 		try {
 
 			Cliente clienteNuevo = new Cliente();
-			
-			Optional<Secretario> secre2 = secreRepository.findById(id); 
+
+			Optional<Secretario> secre2 = secreRepository.findById(id);
 			Secretario secre = (Secretario) secre2.get();
-			
+
 			clienteNuevo.setNombre(cliente.getNombre());
 			clienteNuevo.setSecretario(secre);
 			clienteNuevo.setCedula(cliente.getCedula());
@@ -85,10 +85,9 @@ public class ClienteController {
 		}
 	}
 
-	@PutMapping("/clientes/{id}")
-	public ResponseEntity<String> updateCliente(@PathVariable("id") long id,
-			@RequestBody ClientDto cliente) {
-		Optional<Cliente> clienteData = clienteRepository.findById(id);
+	@PutMapping("/clientes")
+	public ResponseEntity<String> updateCliente(@RequestBody ClientDto cliente) {
+		Optional<Cliente> clienteData = clienteRepository.findById((long) cliente.getId());
 
 		if (clienteData.isPresent()) {
 			Cliente clienteActualizado = clienteData.get();
@@ -100,16 +99,15 @@ public class ClienteController {
 			clienteActualizado.setOcupacion(cliente.getOcupacion());
 			clienteActualizado.setTelefono(cliente.getTelefono());
 			clienteActualizado.setFechaNacimiento(cliente.getFecha_nacimiento());
-			
+
 			clienteRepository.save(clienteActualizado);
-			
-			
+
 			return new ResponseEntity<>("Cliente actualizado", HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>("El cliente no se encuetra registrado ",HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("El cliente no se encuetra registrado ", HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@DeleteMapping("/clientes/{id}")
 	public ResponseEntity<HttpStatus> deleteCliente(@PathVariable("id") long id) {
 		try {

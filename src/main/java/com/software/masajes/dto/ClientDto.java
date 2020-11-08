@@ -1,9 +1,9 @@
 package com.software.masajes.dto;
 
-
-
 public class ClientDto {
 
+	private int id;
+	
 	private String direccion;
 
 	private String cedula;
@@ -78,4 +78,13 @@ public class ClientDto {
 		super();
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	
 }

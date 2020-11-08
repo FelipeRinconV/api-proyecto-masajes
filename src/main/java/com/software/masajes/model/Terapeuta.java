@@ -3,6 +3,7 @@ package com.software.masajes.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,7 +36,7 @@ public class Terapeuta implements Serializable {
 	@Column(name = "id_terapeuta")
 	private long id;
 
-	@OneToMany(mappedBy = "terapeuta")
+	@OneToMany(mappedBy = "terapeuta", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<TerapiaTerapeuta> terapiaTerapeutas;
 
 	@OneToMany(mappedBy = "terapeuta")
@@ -134,7 +135,5 @@ public class Terapeuta implements Serializable {
 	public void setTerapiaTerapeutas(List<TerapiaTerapeuta> terapiaTerapeutas) {
 		this.terapiaTerapeutas = terapiaTerapeutas;
 	}
-
-	
 
 }
