@@ -21,9 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import com.software.masajes.dto.CitaDto;
-import com.software.masajes.dto.ClientDto;
 import com.software.masajes.model.Cita;
-import com.software.masajes.model.Cliente;
 import com.software.masajes.model.Factura;
 import com.software.masajes.model.Secretario;
 import com.software.masajes.model.Terapeuta;
@@ -75,7 +73,7 @@ public class CitaController {
 	}
 	
 	@GetMapping("/cita/{id}")
-	public ResponseEntity<Cita> getCById(@PathVariable("id") long id) {
+	public ResponseEntity<Cita> getCitaById(@PathVariable("id") long id) {
 		Optional<Cita> tutorialData = citaRepository.findById(id);
 		if (tutorialData.isPresent()) {
 			return new ResponseEntity<>(tutorialData.get(), HttpStatus.OK);
