@@ -13,6 +13,8 @@ public class CitaDto {
 	private int idTerapeuta;
 
 	private int idFactura;
+	
+	private int id;
 
 	public String getFechaInicio() {
 		return fechaInicio;
@@ -60,6 +62,14 @@ public class CitaDto {
 
 	public void setIdFactura(int idFactura) {
 		this.idFactura = idFactura;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 }
