@@ -1,6 +1,7 @@
 package com.software.masajes.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -11,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -33,6 +35,11 @@ public class Cliente implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "id_secretario")
 	private Secretario secretario;
+	
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente")
+	private List<Cita> citas;
+	
 
 	@Column(name = "cedula", nullable = false)
 	private String cedula;
@@ -144,6 +151,14 @@ public class Cliente implements Serializable {
 
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
+	}
+
+	public List<Cita> getCitas() {
+		return citas;
+	}
+
+	public void setCitas(List<Cita> citas) {
+		this.citas = citas;
 	}
 	
 	

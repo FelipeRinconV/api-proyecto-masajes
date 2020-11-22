@@ -43,6 +43,11 @@ public class Factura implements Serializable {
 	public void setCitas(List<Cita> citas) {
 		this.citas = citas;
 	}
+
+	@Override
+	public String toString() {
+		return "Factura [id=" + id + "]";
+	}
 	
 	
 	

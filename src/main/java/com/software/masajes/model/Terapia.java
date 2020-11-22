@@ -6,7 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,14 +29,14 @@ public class Terapia implements Serializable {
 	@Column(name = "id_terapia")
 	private long id;
 
-	@OneToMany(mappedBy = "terapia", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY,mappedBy = "terapia", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<TerapiaTerapeuta> terapiaTerapeutas;
 
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_secretario")
 	private Secretario secretario;
 
-	@OneToMany(mappedBy = "terapia")
+	@OneToMany(fetch = FetchType.LAZY,mappedBy = "terapia")
 	private List<Cita> citas;
 
 	@Column(nullable = false, name = "nombre")

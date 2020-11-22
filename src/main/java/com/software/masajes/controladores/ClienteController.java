@@ -60,12 +60,12 @@ public class ClienteController {
 	}
 
 	@PostMapping("/clientes/{id}")
-	public ResponseEntity<Cliente> createCliente(@RequestBody ClientDto cliente, @PathVariable("id") long id) {
+	public ResponseEntity<Cliente> createCliente(@RequestBody ClientDto cliente) {
 		try {
 
 			Cliente clienteNuevo = new Cliente();
 
-			Optional<Secretario> secre2 = secreRepository.findById(id);
+			Optional<Secretario> secre2 = secreRepository.findById((long) cliente.getIdSectretario());
 			Secretario secre = (Secretario) secre2.get();
 
 			clienteNuevo.setNombre(cliente.getNombre());
@@ -86,8 +86,8 @@ public class ClienteController {
 	}
 
 	@PutMapping("/clientes")
-	public ResponseEntity<String> updateCliente(@RequestBody ClientDto cliente) {
-		Optional<Cliente> clienteData = clienteRepository.findById((long) cliente.getId());
+	public ResponseEntity<String> updateCliente(@RequestBody ClientDto cliente, @PathVariable long idCleinte) {
+		Optional<Cliente> clienteData = clienteRepository.findById(idCleinte);
 
 		if (clienteData.isPresent()) {
 			Cliente clienteActualizado = clienteData.get();

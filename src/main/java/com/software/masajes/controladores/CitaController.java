@@ -1,5 +1,6 @@
 package com.software.masajes.controladores;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -21,14 +22,19 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import com.software.masajes.dto.CitaDto;
+import com.software.masajes.dto.CitaOuputDto;
+import com.software.masajes.dto.ObservacionDto;
 import com.software.masajes.model.Cita;
+import com.software.masajes.model.Cliente;
 import com.software.masajes.model.Factura;
+import com.software.masajes.model.Observacion;
 import com.software.masajes.model.Secretario;
 import com.software.masajes.model.Terapeuta;
 import com.software.masajes.model.Terapia;
 import com.software.masajes.repository.CitaRepository;
 import com.software.masajes.repository.ClienteRepository;
 import com.software.masajes.repository.FacturaRepository;
+import com.software.masajes.repository.ObservacionRepositoey;
 import com.software.masajes.repository.SecretarioRepository;
 import com.software.masajes.repository.TerapeutaRepository;
 import com.software.masajes.repository.TerapiaRepository;
@@ -37,51 +43,60 @@ import com.software.masajes.repository.TerapiaRepository;
 @RestController
 @RequestMapping("/api")
 public class CitaController {
-	
+
 	@Autowired
 	ClienteRepository clienteRepository;
 
 	@Autowired
 	SecretarioRepository secreRepository;
-	
+
 	@Autowired
 	CitaRepository citaRepository;
-	
+
 	@Autowired
 	TerapiaRepository terapiaRepository;
-	
+
 	@Autowired
 	TerapeutaRepository terapeutaRepository;
-	
+
 	@Autowired
 	FacturaRepository facturaRepository;
 	
+	@Autowired
+	ObservacionRepositoey observacionRepository;
+
 	@GetMapping("/citas")
-	public ResponseEntity<List<Cita>> getAllCitas() {
+	public ResponseEntity<List<CitaOuputDto>> getAllCitas() {
 		try {
 
 			List<Cita> citas = citaRepository.findAll();
 
 			if (citas.isEmpty()) {
+			
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}else {
+				return new ResponseEntity<>(covertirListaCitaAListaCitaOuputDto(citas), HttpStatus.OK);
+
 			}
 
-			return new ResponseEntity<>(citas, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@GetMapping("/cita/{id}")
-	public ResponseEntity<Cita> getCitaById(@PathVariable("id") long id) {
-		Optional<Cita> tutorialData = citaRepository.findById(id);
-		if (tutorialData.isPresent()) {
-			return new ResponseEntity<>(tutorialData.get(), HttpStatus.OK);
+	public ResponseEntity<CitaOuputDto> getCitaById(@PathVariable("id") long id) {
+		Optional<Cita> cita = citaRepository.findById(id);
+		
+		if (cita.isPresent()) {
+			Cita citaEncontrada = cita.get();
+		
+			return new ResponseEntity<>(convertirCitaACitaOuputDto(citaEncontrada), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@PostMapping("/cita/{id}")
 	public ResponseEntity<Cita> createCita(@RequestBody CitaDto cita) {
 		try {
@@ -89,28 +104,27 @@ public class CitaController {
 			Cita citaNuevo = new Cita();
 
 			Optional<Secretario> secre2 = secreRepository.findById((long) cita.getIdSecretario());
-			Secretario secretario = (Secretario) secre2.get();
-			
 			Optional<Terapia> terapia2 = terapiaRepository.findById((long) cita.getIdTerapia());
-			Terapia terapia = (Terapia) terapia2.get();
-			
 			Optional<Terapeuta> terapeuta2 = terapeutaRepository.findById((long) cita.getIdTerapeuta());
-			Terapeuta terapeuta = (Terapeuta) terapeuta2.get();
-			
 			Optional<Factura> factura2 = facturaRepository.findById((long) cita.getIdFactura());
-			Factura factura = (Factura) factura2.get();
+		
+			Optional<Cliente> clienteOptional = clienteRepository.findById((long) cita.getIdCliente());
+			
 			
 			SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-	        Date fechaInicio = formato.parse(cita.getFechaInicio());;
-	        Date fechaFinal = formato.parse(cita.getFechaFinal());
-	        
-			citaNuevo.setFactura(factura);
-			citaNuevo.setId((long) cita.getId());
-			citaNuevo.setSecretario(secretario);
-			citaNuevo.setTerapeuta(terapeuta);
-			citaNuevo.setTerapia(terapia);
+			//Date fechaInicio = formato.parse(cita.getFechaInicio());
+
+			Date fechaInicio = new Date();
+			Date fechaFinal = new Date();
+			//Date fechaFinal = formato.parse(cita.getFechaFinal());
+
+			citaNuevo.setFactura(factura2.get());
+			citaNuevo.setSecretario(secre2.get());
+			citaNuevo.setTerapeuta(terapeuta2.get());
+			citaNuevo.setTerapia(terapia2.get());
 			citaNuevo.setFechaInicio(fechaInicio);
 			citaNuevo.setFechaFinal(fechaFinal);
+			citaNuevo.setCliente(clienteOptional.get());
 
 			Cita _tutorial = citaRepository.save(citaNuevo);
 
@@ -119,32 +133,32 @@ public class CitaController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	@PutMapping("/citas")
-	public ResponseEntity<String> updateCita(@RequestBody CitaDto cita) throws ParseException {
-		Optional<Cita> citaData = citaRepository.findById((long) cita.getId());
+
+	@PutMapping("/citas/{idCita}")
+	public ResponseEntity<String> updateCita(@RequestBody CitaDto cita,@PathVariable("idCita") int idCita) throws ParseException {
+		Optional<Cita> citaData = citaRepository.findById((long) idCita);
 
 		if (citaData.isPresent()) {
 			Cita citaActualizado = citaData.get();
 
 			Optional<Secretario> secre2 = secreRepository.findById((long) cita.getIdSecretario());
 			Secretario secretario = (Secretario) secre2.get();
-			
+
 			Optional<Terapia> terapia2 = terapiaRepository.findById((long) cita.getIdTerapia());
 			Terapia terapia = (Terapia) terapia2.get();
-			
+
 			Optional<Terapeuta> terapeuta2 = terapeutaRepository.findById((long) cita.getIdTerapeuta());
 			Terapeuta terapeuta = (Terapeuta) terapeuta2.get();
-			
+
 			Optional<Factura> factura2 = facturaRepository.findById((long) cita.getIdFactura());
 			Factura factura = (Factura) factura2.get();
-			
+
 			SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-	        Date fechaInicio = formato.parse(cita.getFechaInicio());;
-	        Date fechaFinal = formato.parse(cita.getFechaFinal());
-	        
+			Date fechaInicio = formato.parse(cita.getFechaInicio());
+			;
+			Date fechaFinal = formato.parse(cita.getFechaFinal());
+
 			citaActualizado.setFactura(factura);
-			citaActualizado.setId((long) cita.getId());
 			citaActualizado.setSecretario(secretario);
 			citaActualizado.setTerapeuta(terapeuta);
 			citaActualizado.setTerapia(terapia);
@@ -158,7 +172,7 @@ public class CitaController {
 			return new ResponseEntity<>("La cita no se encuentra en el sistema", HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@DeleteMapping("/citas/{id}")
 	public ResponseEntity<HttpStatus> deleteCita(@PathVariable("id") long id) {
 		try {
@@ -169,5 +183,88 @@ public class CitaController {
 		}
 	}
 	
+	
+	@PostMapping("cita/observacion")
+	private  ResponseEntity<String>  addObservacion(@RequestBody ObservacionDto observacion){
+		
+		
+		try {
+			Optional<Cita> cita = citaRepository.findById(observacion.getIdCita());
+			
+			if(cita.isPresent()) {
+				
+				Optional<Terapeuta> terapeuta = terapeutaRepository.findById(observacion.getIdTerapeuta());
+				
+				if(terapeuta.isPresent()) {
+					
+					if(observacion.getObservacion().length()>0) {
+						
+						Observacion nuevaObservacion = new Observacion();
+						nuevaObservacion.setCita(cita.get());
+						nuevaObservacion.setTerapeuta(terapeuta.get());
+						
+						observacionRepository.save(nuevaObservacion);
+						
+					   return new ResponseEntity<>("La observacion se guardo correctamente", HttpStatus.CREATED);
+
+						
+					}else {
+						return new ResponseEntity<>("LA OBSERVACION DEBE TENER CONTENIDO", HttpStatus.NOT_ACCEPTABLE);
+
+					}
+					
+				}else {
+					return new ResponseEntity<>("El terapeuta con el id:"+ observacion.getIdTerapeuta() + " no se encuentra", HttpStatus.NOT_FOUND);
+				}
+				
+			}else {
+				return new ResponseEntity<>("La cita con el id:"+ observacion.getIdCita() + " no se encuentra", HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>("Ocurrio un error en la operacion",HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		
+	}
+	
+	
+	/**
+	 * Metodo que convierte un cliente modelo a un clienteOuputDto el cual se usa para dar las selidas de los servicios
+	 * de las citas
+	 * @return
+	 */
+    public CitaOuputDto convertirCitaACitaOuputDto(Cita cita) {
+    	
+    	CitaOuputDto citaOuputDto= new CitaOuputDto();
+    	
+   
+    	citaOuputDto.setIdCita(cita.getId());
+    	citaOuputDto.setFechaFinal(cita.getFechaFinal().toString().split(" ")[0]);
+    	citaOuputDto.setHoraInicio(cita.getFechaFinal().toString().split(" ")[1].substring(0,5));
+    	citaOuputDto.setFechaInicial(cita.getFechaInicio().toString().split(" ")[0]);
+    	citaOuputDto.setHoraFinal(cita.getFechaInicio().toString().split(" ")[1].substring(0,5));
+    	citaOuputDto.setNombreProfesional(cita.getTerapeuta().getNombre());
+    	citaOuputDto.setIdFactura(cita.getFactura().getId());
+    	
+    	return citaOuputDto;
+    	
+    	
+    }
+    
+    
+    
+    public  List<CitaOuputDto> covertirListaCitaAListaCitaOuputDto(List<Cita> listaCitas){
+    	
+    	List<CitaOuputDto> listaCitaOuputDto= new ArrayList<CitaOuputDto>();
+    	
+    	for(Cita citaActual: listaCitas) {
+    		
+    		listaCitaOuputDto.add(convertirCitaACitaOuputDto(citaActual));
+    		
+    	}
+  
+		return listaCitaOuputDto;
+    	
+    }
 
 }

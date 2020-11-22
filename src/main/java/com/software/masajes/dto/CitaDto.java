@@ -14,7 +14,8 @@ public class CitaDto {
 
 	private int idFactura;
 	
-	private int id;
+	private int idCliente;
+	
 
 	public String getFechaInicio() {
 		return fechaInicio;
@@ -64,12 +65,15 @@ public class CitaDto {
 		this.idFactura = idFactura;
 	}
 
-	public int getId() {
-		return id;
+	public int getIdCliente() {
+		return idCliente;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setIdCliente(int idCliente) {
+		this.idCliente = idCliente;
 	}
+	
+	
+
 
 }

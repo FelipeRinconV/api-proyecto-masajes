@@ -32,10 +32,10 @@ public class Secretario implements Serializable {
 	@Column(name = "id_secretario")
 	private long id;
 
-	@OneToMany(mappedBy = "secretario")
+	@OneToMany(fetch = FetchType.LAZY,mappedBy = "secretario")
 	private List<Cita> citas;
 
-	@OneToMany(mappedBy = "secretario")
+	@OneToMany(fetch = FetchType.LAZY,mappedBy = "secretario")
 	private List<Terapia> terapias;
 
 	@Column(nullable = false)
