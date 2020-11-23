@@ -1,5 +1,6 @@
 package com.software.masajes.controladores;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,7 @@ import com.software.masajes.model.Cita;
 import com.software.masajes.model.Secretario;
 import com.software.masajes.model.Terapeuta;
 import com.software.masajes.model.Terapia;
+import com.software.masajes.model.TerapiaOuputDto;
 import com.software.masajes.model.TerapiaTerapeuta;
 import com.software.masajes.repository.CitaRepository;
 import com.software.masajes.repository.ClienteRepository;
@@ -59,7 +61,7 @@ public class TerapiaController {
 	FacturaRepository facturaRepository;
 	
 	@GetMapping("/terapias")
-	public ResponseEntity<List<Terapia>> getAllTerapias() {
+	public ResponseEntity<List<TerapiaOuputDto> > getAllTerapias() {
 		try {
 
 			List<Terapia> terapias = terapiaRepository.findAll();
@@ -68,7 +70,7 @@ public class TerapiaController {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 
-			return new ResponseEntity<>(terapias, HttpStatus.OK);
+			return new ResponseEntity<>(convertirListaTerapiaAListaTerapiaOuputDto(terapias), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -150,6 +152,36 @@ public class TerapiaController {
 	
 	
 	
+	public  TerapiaOuputDto convertirTerapiaATerapiaOuputDto(Terapia terapia) {
+		
+		TerapiaOuputDto terapiaOuputDto = new TerapiaOuputDto();
+		
+		terapiaOuputDto.setDuracionMinutos(terapia.getDuracionMinutos());
+		terapiaOuputDto.setId(terapia.getId());
+		terapiaOuputDto.setNombre(terapia.getNombre());
+		terapiaOuputDto.setPrecio(terapia.getPrecio());
+		
+		
+		
+		return terapiaOuputDto;
+		
+	}
+	
+	
+	
+	public  List<TerapiaOuputDto> convertirListaTerapiaAListaTerapiaOuputDto(List<Terapia> terapias){
+		
+		
+		List<TerapiaOuputDto> listaTerapiaOuputDtos= new ArrayList<TerapiaOuputDto>();
+		
+		
+		for(Terapia tera:terapias) {
+			listaTerapiaOuputDtos.add(convertirTerapiaATerapiaOuputDto(tera));
+		}
+		
+		return listaTerapiaOuputDtos;
+		
+	}
 	
 	
 	

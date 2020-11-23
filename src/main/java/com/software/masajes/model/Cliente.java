@@ -12,15 +12,26 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@NamedQueries({
+
+	@NamedQuery(name = Cliente.CLIENTE_BY_CEDULA, query = "select u from Cliente u where u.cedula=:ce")
+
+})
 @Entity
 @Table(name = "clientes")
 public class Cliente implements Serializable {
 
+	
+	
+	public static final String CLIENTE_BY_CEDULA="cliente_por_cedula";
+	
 	/**
 	 * 
 	 */

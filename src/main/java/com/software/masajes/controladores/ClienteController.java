@@ -3,6 +3,10 @@ package com.software.masajes.controladores;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +29,17 @@ import com.software.masajes.repository.SecretarioRepository;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
-public class ClienteController {
+public class ClienteController  {
 
 	@Autowired
 	ClienteRepository clienteRepository;
 
 	@Autowired
 	SecretarioRepository secreRepository;
+	
+	@PersistenceContext
+	private EntityManager entityManager;
+	
 
 	@GetMapping("/clientes")
 	public ResponseEntity<List<Cliente>> getAllClientes() {
@@ -116,5 +124,22 @@ public class ClienteController {
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	@GetMapping("/cliente/cedula/{cedula}")
+	public ResponseEntity<Cliente>  getClienteByCedula(@PathVariable("cedula") String cedula ){
+		
+		TypedQuery<Cliente> queryClienteByCedula= entityManager.createNamedQuery(Cliente.CLIENTE_BY_CEDULA, Cliente.class);
+		queryClienteByCedula.setParameter("ce", cedula);
+		
+		Cliente cliente= queryClienteByCedula.getSingleResult();
+		
+		if(cliente!=null) {
+			return new ResponseEntity<Cliente>(cliente,HttpStatus.FOUND);
+		}else {
+			return new ResponseEntity<Cliente>(HttpStatus.NO_CONTENT);
+		}
+		
+		
 	}
 }

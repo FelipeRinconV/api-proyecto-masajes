@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @NamedQueries({
 
 		@NamedQuery(name = Secretario.LOG_SECRETARIO, query = "select u from Secretario u where u.email=:email and u.clave=:clave")

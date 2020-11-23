@@ -12,11 +12,20 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+
+@NamedQueries({
+
+
+})
 @Entity
 @Table(name = "citas")
 public class Cita implements Serializable {
@@ -39,10 +48,12 @@ public class Cita implements Serializable {
 	@Column(nullable = false, name = "fecha_final")
 	private Date fechaFinal;
 
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_secretario")
 	private Secretario secretario;
 
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_terapia")
 	private Terapia terapia;
@@ -51,9 +62,11 @@ public class Cita implements Serializable {
 	@JoinColumn(name = "id_terapeuta")
 	private Terapeuta terapeuta;
 
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_factura")
 	private Factura factura;
+	
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name  ="id_cliente")

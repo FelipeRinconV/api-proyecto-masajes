@@ -4,15 +4,15 @@ public class CitaDto {
 
 	private String fechaInicio;
 
-	private String fechaFinal;
+	private String horaInicial;
+	
+	private int duracion;
 
 	private int idSecretario;
 
 	private int idTerapia;
 
 	private int idTerapeuta;
-
-	private int idFactura;
 	
 	private int idCliente;
 	
@@ -25,13 +25,6 @@ public class CitaDto {
 		this.fechaInicio = fechaInicio;
 	}
 
-	public String getFechaFinal() {
-		return fechaFinal;
-	}
-
-	public void setFechaFinal(String fechaFinal) {
-		this.fechaFinal = fechaFinal;
-	}
 
 	public int getIdTerapia() {
 		return idTerapia;
@@ -71,6 +64,22 @@ public class CitaDto {
 
 	public void setIdCliente(int idCliente) {
 		this.idCliente = idCliente;
+	}
+
+	public String getHoraInicial() {
+		return horaInicial;
+	}
+
+	public void setHoraInicial(String horaInicial) {
+		this.horaInicial = horaInicial;
+	}
+
+	public int getDuracion() {
+		return duracion;
+	}
+
+	public void setDuracion(int duracion) {
+		this.duracion = duracion;
 	}
 	
 	

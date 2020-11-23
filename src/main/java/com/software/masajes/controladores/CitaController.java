@@ -1,6 +1,7 @@
 package com.software.masajes.controladores;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -98,26 +99,27 @@ public class CitaController {
 	}
 
 	@PostMapping("/cita/{id}")
-	public ResponseEntity<Cita> createCita(@RequestBody CitaDto cita) {
+	public ResponseEntity<String> createCita(@RequestBody CitaDto citaDto) {
 		try {
 
 			Cita citaNuevo = new Cita();
-
-			Optional<Secretario> secre2 = secreRepository.findById((long) cita.getIdSecretario());
-			Optional<Terapia> terapia2 = terapiaRepository.findById((long) cita.getIdTerapia());
-			Optional<Terapeuta> terapeuta2 = terapeutaRepository.findById((long) cita.getIdTerapeuta());
-			Optional<Factura> factura2 = facturaRepository.findById((long) cita.getIdFactura());
 		
-			Optional<Cliente> clienteOptional = clienteRepository.findById((long) cita.getIdCliente());
+
+			Optional<Secretario> secre2 = secreRepository.findById((long) citaDto.getIdSecretario());
+			Optional<Terapia> terapia2 = terapiaRepository.findById((long) citaDto.getIdTerapia());
+			Optional<Terapeuta> terapeuta2 = terapeutaRepository.findById((long) citaDto.getIdTerapeuta());
+			Optional<Factura> factura2 = facturaRepository.findById((long) citaDto.getIdFactura());
+		
+			Optional<Cliente> clienteOptional = clienteRepository.findById((long) citaDto.getIdCliente());
 			
-			
-			SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+			SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			//Date fechaInicio = formato.parse(cita.getFechaInicio());
-
-			Date fechaInicio = new Date();
-			Date fechaFinal = new Date();
-			//Date fechaFinal = formato.parse(cita.getFechaFinal());
-
+	
+			String fechaInicioCita = citaDto.getFechaInicio()+" "+citaDto.getHoraInicial()+":00";
+			
+			Date fechaInicio = formato.parse(fechaInicioCita);
+			Date fechaFinal = darFechaFinal(fechaInicio, citaDto.getDuracion());
+			
 			citaNuevo.setFactura(factura2.get());
 			citaNuevo.setSecretario(secre2.get());
 			citaNuevo.setTerapeuta(terapeuta2.get());
@@ -125,13 +127,28 @@ public class CitaController {
 			citaNuevo.setFechaInicio(fechaInicio);
 			citaNuevo.setFechaFinal(fechaFinal);
 			citaNuevo.setCliente(clienteOptional.get());
+			
+	        Factura factura = new Factura();
+			
+			factura.setCitas(citaNuevo);
 
-			Cita _tutorial = citaRepository.save(citaNuevo);
+			 citaRepository.save(citaNuevo);
 
-			return new ResponseEntity<>(_tutorial, HttpStatus.CREATED);
+			return new ResponseEntity<>("Cita creada satisfactoriamente", HttpStatus.CREATED);
 		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("Hubo un problema creando la cita", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	private Date darFechaFinal(Date fechaInicial,int minutos) {
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(fechaInicial); 
+		calendar.add(Calendar.MINUTE, minutos); 
+	
+		Date fechaSalida = calendar.getTime();
+		
+		return fechaSalida;
 	}
 
 	@PutMapping("/citas/{idCita}")
@@ -155,15 +172,15 @@ public class CitaController {
 
 			SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 			Date fechaInicio = formato.parse(cita.getFechaInicio());
-			;
-			Date fechaFinal = formato.parse(cita.getFechaFinal());
+			
+			//Date fechaFinal = formato.parse(cita.getFechaFinal());
 
 			citaActualizado.setFactura(factura);
 			citaActualizado.setSecretario(secretario);
 			citaActualizado.setTerapeuta(terapeuta);
 			citaActualizado.setTerapia(terapia);
 			citaActualizado.setFechaInicio(fechaInicio);
-			citaActualizado.setFechaFinal(fechaFinal);
+		//	citaActualizado.setFechaFinal(fechaFinal);
 
 			citaRepository.save(citaActualizado);
 

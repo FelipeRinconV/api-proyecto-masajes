@@ -15,6 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "terapias")
 public class Terapia implements Serializable {
@@ -28,14 +31,16 @@ public class Terapia implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_terapia")
 	private long id;
+	
 
-	@OneToMany(fetch = FetchType.LAZY,mappedBy = "terapia", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "terapia", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<TerapiaTerapeuta> terapiaTerapeutas;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_secretario")
+	@JoinColumn(name = "id_secretario")	
 	private Secretario secretario;
 
+	
 	@OneToMany(fetch = FetchType.LAZY,mappedBy = "terapia")
 	private List<Cita> citas;
 
@@ -116,4 +121,5 @@ public class Terapia implements Serializable {
 		this.secretario = descretario;
 	}
 
+	
 }
