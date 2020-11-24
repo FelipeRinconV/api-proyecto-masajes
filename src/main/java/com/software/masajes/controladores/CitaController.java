@@ -242,6 +242,17 @@ public class CitaController {
 	}
 	
 	
+//   @GetMapping	
+//   public ResponseEntity<List<ObservacionOuputDto>>  observacionesPorCita(int idCita){
+//		
+//	   
+//	  // TypedQuery<ObservacionOuputDto> query = entityManager.createNamedQuery(Observacion.LISTAR_OBSERVACIONES_POR_CITA, resultClass)
+//			
+//
+//		
+//	}
+	
+	
 	/**
 	 * Metodo que brinda las fechas ordenadas por fecha
 	 * @return
@@ -263,14 +274,7 @@ public class CitaController {
 	}
 	
 	
-	public ResponseEntity<Observacion>  observacionesPorCita(){
-		
-		
-		
-
-		return null;
-		
-	}
+	
 	
 	
 	/**
@@ -315,8 +319,13 @@ public class CitaController {
     
     public ObservacionOuputDto  convertirObservacionAObservacionDto(Observacion observacion) {
     	
+    	ObservacionOuputDto observacionOuputDto = new ObservacionOuputDto();
     	
-    	return null;
+    	
+    	observacion.setObservacion(observacion.getObservacion());
+    	
+    	
+    	return observacionOuputDto;
     	
     }
 

@@ -67,7 +67,7 @@ public class ClienteController  {
 		}
 	}
 
-	@PostMapping("/clientes/{id}")
+	@PostMapping("/clientes")
 	public ResponseEntity<Cliente> createCliente(@RequestBody ClientDto cliente) {
 		try {
 
