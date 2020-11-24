@@ -12,8 +12,7 @@ public class CitaOuputDto {
 	
 	private String  nombreProfesional;
 	private String nombreCliente;
-	
-	private long idFactura;
+
 	
 	
 	
@@ -78,13 +77,7 @@ public class CitaOuputDto {
 		this.nombreCliente = nombreCliente;
 	}
 
-	public long getIdFactura() {
-		return idFactura;
-	}
 
-	public void setIdFactura(long idFactura) {
-		this.idFactura = idFactura;
-	}
 	
 	
     

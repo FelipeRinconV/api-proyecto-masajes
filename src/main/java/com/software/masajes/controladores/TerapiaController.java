@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.software.masajes.dto.TerapiaDto;
 import com.software.masajes.dto.TerapiaTerapeutaDto;
-import com.software.masajes.model.Cita;
 import com.software.masajes.model.Secretario;
 import com.software.masajes.model.Terapeuta;
 import com.software.masajes.model.Terapia;
@@ -28,7 +27,6 @@ import com.software.masajes.model.TerapiaOuputDto;
 import com.software.masajes.model.TerapiaTerapeuta;
 import com.software.masajes.repository.CitaRepository;
 import com.software.masajes.repository.ClienteRepository;
-import com.software.masajes.repository.FacturaRepository;
 import com.software.masajes.repository.SecretarioRepository;
 import com.software.masajes.repository.TerapeutaRepository;
 import com.software.masajes.repository.TerapiaRepository;
@@ -57,8 +55,6 @@ public class TerapiaController {
 	@Autowired
 	TerapeutaRepository terapeutaRepository;
 	
-	@Autowired
-	FacturaRepository facturaRepository;
 	
 	@GetMapping("/terapias")
 	public ResponseEntity<List<TerapiaOuputDto> > getAllTerapias() {

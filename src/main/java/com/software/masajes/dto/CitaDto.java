@@ -50,13 +50,7 @@ public class CitaDto {
 		this.idTerapeuta = idTerapeuta;
 	}
 
-	public int getIdFactura() {
-		return idFactura;
-	}
-
-	public void setIdFactura(int idFactura) {
-		this.idFactura = idFactura;
-	}
+	
 
 	public int getIdCliente() {
 		return idCliente;

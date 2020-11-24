@@ -23,8 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @NamedQueries({
-
-
+	 @NamedQuery(name = Cita.LISTAR_CITAS_ORDENADAS_POR_FECHA,query = "SELECT c FROM Cita c ORDER BY c.fechaInicio" )
 })
 @Entity
 @Table(name = "citas")
@@ -35,11 +34,18 @@ public class Cita implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	public static final String  LISTAR_CITAS_ORDENADAS_POR_FECHA="LISTA_FECHAS_ORDENADAS";
+	
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_cita")
 	private Long id;
 
+	
+	@Column(name = "estado_pago", nullable = false)
+	private int estadoPago;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false, name = "fecha")
 	private Date fechaInicio;
@@ -61,20 +67,11 @@ public class Cita implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_terapeuta")
 	private Terapeuta terapeuta;
-
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_factura")
-	private Factura factura;
-	
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name  ="id_cliente")
 	private Cliente cliente;
 	
-	@OneToOne
-    @JoinColumn(name="id_observacion",nullable = true)
-	private Observacion observacion;
 
 	public Long getId() {
 		return id;
@@ -111,14 +108,6 @@ public class Cita implements Serializable {
 		this.terapeuta = terapeuta;
 	}
 
-	public Factura getFactura() {
-		return factura;
-	}
-
-	public void setFactura(Factura factura) {
-		this.factura = factura;
-	}
-
 	public Secretario getSecretario() {
 		return secretario;
 	}
@@ -143,14 +132,6 @@ public class Cita implements Serializable {
 		this.cliente = cliente;
 	}
 
-	public Observacion getObservacion() {
-		return observacion;
-	}
-
-	public void setObservacion(Observacion observacion) {
-		this.observacion = observacion;
-	}
-	
 	
 
 }

@@ -6,6 +6,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
+import org.omg.IOP.ENCODING_CDR_ENCAPS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,14 +32,14 @@ import com.software.masajes.dto.CitaOuputDto;
 import com.software.masajes.dto.ObservacionDto;
 import com.software.masajes.model.Cita;
 import com.software.masajes.model.Cliente;
-import com.software.masajes.model.Factura;
+
 import com.software.masajes.model.Observacion;
+import com.software.masajes.model.ObservacionOuputDto;
 import com.software.masajes.model.Secretario;
 import com.software.masajes.model.Terapeuta;
 import com.software.masajes.model.Terapia;
 import com.software.masajes.repository.CitaRepository;
 import com.software.masajes.repository.ClienteRepository;
-import com.software.masajes.repository.FacturaRepository;
 import com.software.masajes.repository.ObservacionRepositoey;
 import com.software.masajes.repository.SecretarioRepository;
 import com.software.masajes.repository.TerapeutaRepository;
@@ -60,11 +65,13 @@ public class CitaController {
 	@Autowired
 	TerapeutaRepository terapeutaRepository;
 
-	@Autowired
-	FacturaRepository facturaRepository;
-	
+
 	@Autowired
 	ObservacionRepositoey observacionRepository;
+	
+	@PersistenceContext
+	EntityManager entityManager;
+	
 
 	@GetMapping("/citas")
 	public ResponseEntity<List<CitaOuputDto>> getAllCitas() {
@@ -108,8 +115,6 @@ public class CitaController {
 			Optional<Secretario> secre2 = secreRepository.findById((long) citaDto.getIdSecretario());
 			Optional<Terapia> terapia2 = terapiaRepository.findById((long) citaDto.getIdTerapia());
 			Optional<Terapeuta> terapeuta2 = terapeutaRepository.findById((long) citaDto.getIdTerapeuta());
-			Optional<Factura> factura2 = facturaRepository.findById((long) citaDto.getIdFactura());
-		
 			Optional<Cliente> clienteOptional = clienteRepository.findById((long) citaDto.getIdCliente());
 			
 			SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -120,7 +125,6 @@ public class CitaController {
 			Date fechaInicio = formato.parse(fechaInicioCita);
 			Date fechaFinal = darFechaFinal(fechaInicio, citaDto.getDuracion());
 			
-			citaNuevo.setFactura(factura2.get());
 			citaNuevo.setSecretario(secre2.get());
 			citaNuevo.setTerapeuta(terapeuta2.get());
 			citaNuevo.setTerapia(terapia2.get());
@@ -128,11 +132,7 @@ public class CitaController {
 			citaNuevo.setFechaFinal(fechaFinal);
 			citaNuevo.setCliente(clienteOptional.get());
 			
-	        Factura factura = new Factura();
-			
-			factura.setCitas(citaNuevo);
-
-			 citaRepository.save(citaNuevo);
+	       citaRepository.save(citaNuevo);
 
 			return new ResponseEntity<>("Cita creada satisfactoriamente", HttpStatus.CREATED);
 		} catch (Exception e) {
@@ -167,15 +167,10 @@ public class CitaController {
 			Optional<Terapeuta> terapeuta2 = terapeutaRepository.findById((long) cita.getIdTerapeuta());
 			Terapeuta terapeuta = (Terapeuta) terapeuta2.get();
 
-			Optional<Factura> factura2 = facturaRepository.findById((long) cita.getIdFactura());
-			Factura factura = (Factura) factura2.get();
 
 			SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 			Date fechaInicio = formato.parse(cita.getFechaInicio());
 			
-			//Date fechaFinal = formato.parse(cita.getFechaFinal());
-
-			citaActualizado.setFactura(factura);
 			citaActualizado.setSecretario(secretario);
 			citaActualizado.setTerapeuta(terapeuta);
 			citaActualizado.setTerapia(terapia);
@@ -219,6 +214,8 @@ public class CitaController {
 						Observacion nuevaObservacion = new Observacion();
 						nuevaObservacion.setCita(cita.get());
 						nuevaObservacion.setTerapeuta(terapeuta.get());
+						nuevaObservacion.setObservacion(observacion.getObservacion());
+						nuevaObservacion.setCita(cita.get());
 						
 						observacionRepository.save(nuevaObservacion);
 						
@@ -246,6 +243,43 @@ public class CitaController {
 	
 	
 	/**
+	 * Metodo que brinda las fechas ordenadas por fecha
+	 * @return
+	 */
+	@GetMapping("citas/ordenadasporfecha")
+	public ResponseEntity<List<CitaOuputDto>> getAllCitasOrderByStartDate(){
+		
+		TypedQuery<Cita> queryCitas = entityManager.createNamedQuery(Cita.LISTAR_CITAS_ORDENADAS_POR_FECHA, Cita.class);	
+		List<Cita> citas= queryCitas.getResultList();
+		
+		if(!citas.isEmpty()) {
+			return new ResponseEntity<>(covertirListaCitaAListaCitaOuputDto(citas),HttpStatus.ACCEPTED);
+			
+		}else {
+			return new ResponseEntity<>(null,HttpStatus.NO_CONTENT);
+
+		}
+		
+	}
+	
+	
+	public ResponseEntity<Observacion>  observacionesPorCita(){
+		
+		
+		
+		
+		TypedQuery<X>
+		
+		
+		
+		
+		
+		return null;
+		
+	}
+	
+	
+	/**
 	 * Metodo que convierte un cliente modelo a un clienteOuputDto el cual se usa para dar las selidas de los servicios
 	 * de las citas
 	 * @return
@@ -257,12 +291,12 @@ public class CitaController {
    
     	citaOuputDto.setIdCita(cita.getId());
     	citaOuputDto.setFechaFinal(cita.getFechaFinal().toString().split(" ")[0]);
-    	citaOuputDto.setHoraInicio(cita.getFechaFinal().toString().split(" ")[1].substring(0,5));
     	citaOuputDto.setFechaInicial(cita.getFechaInicio().toString().split(" ")[0]);
-    	citaOuputDto.setHoraFinal(cita.getFechaInicio().toString().split(" ")[1].substring(0,5));
+    	citaOuputDto.setHoraInicio(cita.getFechaInicio().toString().split(" ")[1].substring(0,5));
+    	citaOuputDto.setHoraFinal(cita.getFechaFinal().toString().split(" ")[1].substring(0,5));
     	citaOuputDto.setNombreProfesional(cita.getTerapeuta().getNombre());
-    	citaOuputDto.setIdFactura(cita.getFactura().getId());
-    	
+    	citaOuputDto.setNombreCliente(cita.getCliente().getNombre());
+  
     	return citaOuputDto;
     	
     	
@@ -281,6 +315,14 @@ public class CitaController {
     	}
   
 		return listaCitaOuputDto;
+    	
+    }
+    
+    
+    public ObservacionOuputDto  convertirObservacionAObservacionDto(Observacion observacion) {
+    	
+    	
+    	return null;
     	
     }
 
