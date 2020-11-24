@@ -267,13 +267,7 @@ public class CitaController {
 		
 		
 		
-		
-		TypedQuery<X>
-		
-		
-		
-		
-		
+
 		return null;
 		
 	}
