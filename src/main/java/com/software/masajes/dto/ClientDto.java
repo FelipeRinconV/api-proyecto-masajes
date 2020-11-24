@@ -2,7 +2,7 @@ package com.software.masajes.dto;
 
 public class ClientDto {
 
-	private int idSectretario;
+	private int idSecretario;
 	
 	private String direccion;
 
@@ -78,13 +78,15 @@ public class ClientDto {
 		super();
 	}
 
-	public int getIdSectretario() {
-		return idSectretario;
+	public int getIdSecretario() {
+		return idSecretario;
 	}
 
-	public void setIdSectretario(int idSectretario) {
-		this.idSectretario = idSectretario;
+	public void setIdSecretario(int idSecretario) {
+		this.idSecretario = idSecretario;
 	}
+
+	
 
 	
 	

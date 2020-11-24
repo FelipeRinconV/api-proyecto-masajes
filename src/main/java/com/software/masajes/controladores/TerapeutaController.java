@@ -3,6 +3,10 @@ package com.software.masajes.controladores;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.software.masajes.dto.TerapeutaDto;
+import com.software.masajes.model.Cliente;
 import com.software.masajes.model.Terapeuta;
+import com.software.masajes.model.consultas.personalizadas.ClienteByTerapeuta;
 import com.software.masajes.repository.TerapeutaRepository;
 
 @CrossOrigin(origins = "*")
@@ -27,6 +33,9 @@ public class TerapeutaController {
 
 	@Autowired
 	TerapeutaRepository terapeutaRepository;
+	
+	@PersistenceContext
+	private EntityManager entityManager;
 
 
 	@GetMapping("/terapeutas")
@@ -106,6 +115,27 @@ public class TerapeutaController {
 
 			return new ResponseEntity<>("Error " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	
+	@GetMapping("/terapeutas/clientes/{id}")
+	public ResponseEntity<List<ClienteByTerapeuta>> getClientesAsociados(@PathVariable("id") int idTerapeuta ){
+		
+				
+		TypedQuery<ClienteByTerapeuta> query= entityManager.createNamedQuery(Cliente.CLIENTES_BY_TERAPEUTA, ClienteByTerapeuta.class);
+	
+		query.setParameter(1, idTerapeuta);
+		
+		List<ClienteByTerapeuta> listaClientes = query.getResultList();
+		
+		if(!listaClientes.isEmpty()) {
+			
+			return new ResponseEntity<>(listaClientes, HttpStatus.ACCEPTED);
+
+		}else {
+			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+		}
+		
 	}
 
 }

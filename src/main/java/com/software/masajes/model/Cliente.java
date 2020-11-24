@@ -12,17 +12,26 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.software.masajes.model.consultas.personalizadas.ClienteByTerapeuta;
 
 @NamedQueries({
 
 	@NamedQuery(name = Cliente.CLIENTE_BY_CEDULA, query = "select u from Cliente u where u.cedula=:ce")
 
+})
+
+@NamedNativeQueries({
+	@NamedNativeQuery(name = Cliente.CLIENTES_BY_TERAPEUTA, 
+			query = "SELECT  clientes.id_cliente,telefono,cedula,nombre FROM clientes  INNER JOIN citas ON clientes.id_cliente=citas.id_cliente WHERE id_terapeuta = ?")
+	
 })
 @Entity
 @Table(name = "clientes")
@@ -31,6 +40,7 @@ public class Cliente implements Serializable {
 	
 	
 	public static final String CLIENTE_BY_CEDULA="cliente_por_cedula";
+	public static final String CLIENTES_BY_TERAPEUTA="CLIENTES_ASOCIADOS_TERAPEUTA";
 	
 	/**
 	 * 

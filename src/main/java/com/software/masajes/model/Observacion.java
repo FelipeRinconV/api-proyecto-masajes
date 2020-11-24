@@ -10,18 +10,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedNativeQueries;
+
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NamedNativeQuery;
-import org.hibernate.annotations.NamedQueries;
-import org.hibernate.annotations.NamedQuery;
 
 
 
 @NamedNativeQuery(name = Observacion.LISTAR_OBSERVACIONES_POR_CITA, 
-query = "SELECT observacion FROM observaciones WHERE observaciones.cita_id_cita = ?",resultClass = ObservacionOuputDto.class)
+query = "SELECT * FROM observaciones WHERE observaciones.cita_id_cita = ?",resultClass = Observacion.class)
 @Entity
 @Table(name = "observaciones")
 public class Observacion implements Serializable {

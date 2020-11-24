@@ -10,7 +10,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.omg.IOP.ENCODING_CDR_ENCAPS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -272,8 +271,32 @@ public class CitaController {
 		}
 		
 	}
+
 	
 	
+	@GetMapping("citas/observaciones/{id}")
+   public ResponseEntity<List<ObservacionOuputDto>>  observacionesPorCita(@PathVariable("id")int idCita){
+	   
+	   TypedQuery<Observacion> query = entityManager.createNamedQuery(Observacion.LISTAR_OBSERVACIONES_POR_CITA, Observacion.class);
+	   
+	   query.setParameter(1, idCita);
+	   
+	   List<ObservacionOuputDto> observacionesDto = convertirListaObseracionAListaOputDto(query.getResultList());
+	   
+	   if(!observacionesDto.isEmpty()) {
+		   
+		   return new ResponseEntity<>(null,HttpStatus.NO_CONTENT);
+		   
+	   }else {
+		   
+		   return new ResponseEntity<>(observacionesDto,HttpStatus.ACCEPTED);
+	   }
+	   
+	  
+		
+	}
+	
+
 	
 	
 	
@@ -329,4 +352,17 @@ public class CitaController {
     	
     }
 
+    public  List<ObservacionOuputDto> convertirListaObseracionAListaOputDto(List<Observacion> listaObsevaciones){
+    	
+    	List<ObservacionOuputDto> listaObservacionesOuputDto= new ArrayList<ObservacionOuputDto>();
+    	
+    	for(Observacion obser:listaObsevaciones) {
+    		
+    		listaObservacionesOuputDto.add(convertirObservacionAObservacionDto(obser));
+    		
+    	}
+  
+		return listaObservacionesOuputDto;
+    	
+    }
 }

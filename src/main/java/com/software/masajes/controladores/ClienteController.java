@@ -68,12 +68,12 @@ public class ClienteController  {
 	}
 
 	@PostMapping("/clientes")
-	public ResponseEntity<Cliente> createCliente(@RequestBody ClientDto cliente) {
+	public ResponseEntity<String> createCliente(@RequestBody ClientDto cliente) {
 		try {
 
 			Cliente clienteNuevo = new Cliente();
 
-			Optional<Secretario> secre2 = secreRepository.findById((long) cliente.getIdSectretario());
+			Optional<Secretario> secre2 = secreRepository.findById((long) cliente.getIdSecretario());
 			Secretario secre = (Secretario) secre2.get();
 
 			clienteNuevo.setNombre(cliente.getNombre());
@@ -85,11 +85,11 @@ public class ClienteController  {
 			clienteNuevo.setTelefono(cliente.getTelefono());
 			clienteNuevo.setFechaNacimiento(cliente.getFecha_nacimiento());
 
-			Cliente _tutorial = clienteRepository.save(clienteNuevo);
+			 clienteRepository.save(clienteNuevo);
 
-			return new ResponseEntity<>(_tutorial, HttpStatus.CREATED);
+			return new ResponseEntity<>("cliente creado con exito", HttpStatus.CREATED);
 		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
