@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.software.masajes.dto.LoginOuputDto;
 import com.software.masajes.model.Secretario;
 import com.software.masajes.model.Terapeuta;
 
@@ -26,8 +27,10 @@ public class LoginController {
 	EntityManager em;
 
 	@GetMapping("/login")
-	public ResponseEntity<Integer> login(String email, String clave) {
+	public ResponseEntity<LoginOuputDto> login(String email, String clave) {
 
+		
+		LoginOuputDto loginRespuesta= new LoginOuputDto();
 		TypedQuery<Secretario> loginSecretario = em.createNamedQuery(Secretario.LOG_SECRETARIO, Secretario.class);
 
 		loginSecretario.setParameter("email", email);
@@ -36,8 +39,14 @@ public class LoginController {
 		List<Secretario> secretarios = loginSecretario.getResultList();
 
 		if (secretarios.size() != 0) {
+			
+			loginRespuesta.setId((int) secretarios.get(0).getId());
+			loginRespuesta.setEmail(secretarios.get(0).getEmail());
+			loginRespuesta.setNombre(secretarios.get(0).getNombre());
+			loginRespuesta.setIdentificador(1);
+		
 
-			return new ResponseEntity<Integer>(0, HttpStatus.OK);
+			return new ResponseEntity<LoginOuputDto>(loginRespuesta, HttpStatus.OK);
 
 		} else {
 
@@ -47,13 +56,24 @@ public class LoginController {
 			List<Terapeuta> terapeutas = loginTeapreuta.getResultList();
 
 			if (terapeutas.size() > 0) {
-				return new ResponseEntity<Integer>(1, HttpStatus.OK);
+				
+				loginRespuesta.setId((int) terapeutas.get(0).getId());
+				loginRespuesta.setEmail(terapeutas.get(0).getEmail());
+				loginRespuesta.setNombre(terapeutas.get(0).getNombre());
+				loginRespuesta.setIdentificador(0);
+				
+				return new ResponseEntity<LoginOuputDto>(loginRespuesta, HttpStatus.OK);
 
 			}
 		}
-
-		return new ResponseEntity<Integer>(-1, HttpStatus.OK);
+		
+		return new ResponseEntity<>(null, HttpStatus.OK);
 
 	}
 
+	
+	
+	
+	
+	
 }
