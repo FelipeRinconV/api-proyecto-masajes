@@ -1,5 +1,6 @@
 package com.software.masajes.controladores;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,8 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.software.masajes.dto.TerapeutaDto;
+import com.software.masajes.dto.TerapeutaOuputDto;
 import com.software.masajes.model.Cliente;
 import com.software.masajes.model.Terapeuta;
+import com.software.masajes.model.TerapiaOuputDto;
 import com.software.masajes.model.consultas.personalizadas.ClienteByTerapeuta;
 import com.software.masajes.repository.TerapeutaRepository;
 
@@ -39,7 +42,7 @@ public class TerapeutaController {
 
 
 	@GetMapping("/terapeutas")
-	public ResponseEntity<List<Terapeuta>> getAllTerapeutas() {
+	public ResponseEntity<List<TerapeutaOuputDto>> getAllTerapeutas() {
 		try {
 			List<Terapeuta> terapeutas = terapeutaRepository.findAll();
 
@@ -47,17 +50,17 @@ public class TerapeutaController {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 
-			return new ResponseEntity<>(terapeutas, HttpStatus.OK);
+			return new ResponseEntity<>(convertirListaTerapeutaAListaTerapeutaOuputDto(terapeutas), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@GetMapping("/terapeutas/{id}")
-	public ResponseEntity<Terapeuta> getTerapeutaById(@PathVariable("id") long id) {
-		Optional<Terapeuta> tutorialData = terapeutaRepository.findById(id);
-		if (tutorialData.isPresent()) {
-			return new ResponseEntity<>(tutorialData.get(), HttpStatus.OK);
+	public ResponseEntity<TerapeutaOuputDto> getTerapeutaById(@PathVariable("id") long id) {
+		Optional<Terapeuta> terapeuta = terapeutaRepository.findById(id);
+		if (terapeuta.isPresent()) {
+			return new ResponseEntity<>(convertirTerapeutaATerapeutaDto(terapeuta.get()), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -137,5 +140,43 @@ public class TerapeutaController {
 		}
 		
 	}
+	
+	
+	
+	public  TerapeutaOuputDto convertirTerapeutaATerapeutaDto(Terapeuta terapeuta) {
+				
+		TerapeutaOuputDto terapeutaDto = new TerapeutaOuputDto();
+		
+		terapeutaDto.setId(terapeuta.getId());
+		terapeutaDto.setCedula(terapeuta.getCedula());
+		terapeutaDto.setClave(terapeuta.getClave());
+		terapeutaDto.setDireccion(terapeuta.getDireccion());
+		terapeutaDto.setEmail(terapeuta.getEmail());
+		terapeutaDto.setNombre(terapeuta.getNombre());
+		terapeutaDto.setProfesion(terapeuta.getProfesion());
+		
+		
+		return terapeutaDto;		
+	}
+	
+	
+	public List<TerapeutaOuputDto> convertirListaTerapeutaAListaTerapeutaOuputDto(List<Terapeuta> listaTerapeutas){
+		
+		 
+		List<TerapeutaOuputDto> terapeutasDto= new ArrayList<TerapeutaOuputDto>();
+		
+		for(Terapeuta terapeuta: listaTerapeutas) {
+			
+			terapeutasDto.add(convertirTerapeutaATerapeutaDto(terapeuta));
+			
+		}
+		
+		return terapeutasDto;
+		
+	}
+	
+	
+	
+	
 
 }
