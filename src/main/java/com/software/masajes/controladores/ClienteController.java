@@ -155,6 +155,7 @@ public class ClienteController  {
 		clienteDto.setIdSecretario((int) cliente.getSecretario().getId());
 		clienteDto.setNombre(cliente.getNombre());
 		clienteDto.setOcupacion(cliente.getOcupacion());
+		clienteDto.setTelefono(cliente.getTelefono());
 		
 		return clienteDto;
 		
