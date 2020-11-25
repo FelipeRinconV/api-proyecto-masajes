@@ -178,6 +178,7 @@ public class TerapeutaController {
 			
 			query.setParameter(1, fechaInicioCitaDate.toString());
 			query.setParameter(2, fechaFinal.toString());
+			query.setParameter(3, idTerapia);
 			
 			terapeutasDto= query.getResultList();
 			

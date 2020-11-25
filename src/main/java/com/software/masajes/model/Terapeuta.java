@@ -33,10 +33,12 @@ import com.software.masajes.model.consultas.personalizadas.ClienteByTerapeuta;
 })
 
 @NamedNativeQueries({
-	@NamedNativeQuery(name = Terapeuta.GET_TERAPEUTAS_DOSPONIBLES,query = " SELECT  id_terapeuta,cedula,email,nombre,profesion  FROM" + 
-			" terapeutas" + 
+	@NamedNativeQuery(name = Terapeuta.GET_TERAPEUTAS_DOSPONIBLES,query = " SELECT  terapeutas.id_terapeuta,cedula,email,nombre,profesion  FROM" + 
+			" terapeutas INNER JOIN terapia_terapeuta " + 
+			" ON terapeutas.id_terapeuta = terapia_terapeuta.id_terapeuta" + 
 			" WHERE NOT EXISTS " + 
-			" (SELECT id_terapeuta  FROM citas  WHERE  fecha_final <= ? AND  fecha_final >= ? );",resultSetMapping = "GET_TERAPEUTAS_DOSPONIBLES_RESULT" )
+			" (SELECT nombre  FROM citas  WHERE  fecha_final <= ? AND  fecha_final >= ? )"
+			+ "AND id_terapia=?;",resultSetMapping = "GET_TERAPEUTAS_DOSPONIBLES_RESULT" )
 })
 
 
