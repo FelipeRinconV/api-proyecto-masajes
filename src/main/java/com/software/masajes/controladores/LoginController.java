@@ -29,17 +29,14 @@ public class LoginController {
 	EntityManager em;
 
 	@GetMapping("/login")
-	public ResponseEntity<LoginOuputDto> login(@RequestBody LoginDto login) {
+	public ResponseEntity<LoginOuputDto> login(String email,String clave) {
 
-		
-		String email=login.getEmail();
-		String clave=login.getClave();
 		
 		LoginOuputDto loginRespuesta= new LoginOuputDto();
 		TypedQuery<Secretario> loginSecretario = em.createNamedQuery(Secretario.LOG_SECRETARIO, Secretario.class);
 
-		loginSecretario.setParameter("email", login.getEmail());
-		loginSecretario.setParameter("clave", login.getClave());
+		loginSecretario.setParameter("email", email);
+		loginSecretario.setParameter("clave", clave);
 
 		List<Secretario> secretarios = loginSecretario.getResultList();
 
