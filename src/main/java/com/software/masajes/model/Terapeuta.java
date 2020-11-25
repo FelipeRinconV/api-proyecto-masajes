@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,10 +17,14 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NamedNativeQueries;
 import org.hibernate.annotations.NamedNativeQuery;
+
+import com.software.masajes.dto.TerapeutaOuputDto;
+import com.software.masajes.model.consultas.personalizadas.ClienteByTerapeuta;
 
 @NamedQueries({
 
@@ -26,9 +32,28 @@ import org.hibernate.annotations.NamedNativeQuery;
 
 })
 
-//@NamedNativeQueries({
-//	//@NamedNativeQuery(name = "",query = "",resultClass = Terapeuta.class )
-//})
+@NamedNativeQueries({
+	@NamedNativeQuery(name = Terapeuta.GET_TERAPEUTAS_DOSPONIBLES,query = " SELECT  id_terapeuta,cedula,email,nombre,profesion  FROM" + 
+			" terapeutas" + 
+			" WHERE NOT EXISTS " + 
+			" (SELECT id_terapeuta  FROM citas  WHERE  fecha_final <= ? AND  fecha_final >= ? );",resultSetMapping = "GET_TERAPEUTAS_DOSPONIBLES_RESULT" )
+})
+
+
+@SqlResultSetMapping(
+		  name="GET_TERAPEUTAS_DOSPONIBLES_RESULT",
+		  classes = @ConstructorResult(
+				  targetClass = TerapeutaOuputDto.class,
+				  columns = {
+						  @ColumnResult(name = "id_terapeuta",type = Long.class),
+						  @ColumnResult(name = "cedula",type = String.class),
+						  @ColumnResult(name = "email",type = String.class),
+						  @ColumnResult(name = "nombre",type = String.class),
+						  @ColumnResult(name = "profesion",type = String.class)
+						  
+				  }
+				  )
+		)
 
 
 @Entity
@@ -36,6 +61,7 @@ import org.hibernate.annotations.NamedNativeQuery;
 public class Terapeuta implements Serializable {
 
 	public static final String LOG_TERAPEUTA = "login_terapeuta";
+	public static final String GET_TERAPEUTAS_DOSPONIBLES = "terapeutas_disponibles";
 
 	/**
 	 * 

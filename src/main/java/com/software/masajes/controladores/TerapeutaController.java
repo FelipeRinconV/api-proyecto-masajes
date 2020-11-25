@@ -1,6 +1,10 @@
 package com.software.masajes.controladores;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -142,6 +146,50 @@ public class TerapeutaController {
 	}
 	
 	
+	@GetMapping("/terapeutas/avalaibles")
+	public ResponseEntity<List<TerapeutaOuputDto>> getTerapeutasDisponibles(String fechaInicio,String horaInicio,int duracion){
+		
+		
+		List<TerapeutaOuputDto> terapeutasDto = new ArrayList<TerapeutaOuputDto>();
+		
+		try {
+
+			SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");;
+			String fechaInicioCita = fechaInicio+" "+horaInicio+":00";
+			Date fechaInicioCitaDate = formato.parse(fechaInicioCita);
+			Date fechaFinal = darFechaFinal(fechaInicioCitaDate, duracion);
+			
+			
+			TypedQuery<TerapeutaOuputDto> query= entityManager.createNamedQuery(Terapeuta.GET_TERAPEUTAS_DOSPONIBLES, TerapeutaOuputDto.class);
+			
+			query.setParameter(1, fechaInicioCitaDate.toString());
+			query.setParameter(2, fechaFinal.toString());
+			
+			terapeutasDto= query.getResultList();
+			
+			return  new ResponseEntity<List<TerapeutaOuputDto>>(terapeutasDto, HttpStatus.ACCEPTED);
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+	
+		
+	}
+	
+	private Date darFechaFinal(Date fechaInicial,int minutos) {
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(fechaInicial); 
+		calendar.add(Calendar.MINUTE, minutos); 
+	
+		Date fechaSalida = calendar.getTime();
+		
+		return fechaSalida;
+	}
+	
 	
 	public  TerapeutaOuputDto convertirTerapeutaATerapeutaDto(Terapeuta terapeuta) {
 				
@@ -174,6 +222,8 @@ public class TerapeutaController {
 		return terapeutasDto;
 		
 	}
+	
+	
 	
 	
 	

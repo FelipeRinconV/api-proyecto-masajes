@@ -136,7 +136,7 @@ public class ClienteController  {
 		Cliente cliente= queryClienteByCedula.getSingleResult();
 		
 		if(cliente!=null) {
-			return new ResponseEntity<ClientDto>(convertirClienteEnClientDto(cliente),HttpStatus.FOUND);
+			return new ResponseEntity<ClientDto>(convertirClienteEnClientDto(cliente),HttpStatus.OK);
 		}else {
 			return new ResponseEntity<ClientDto>(HttpStatus.NO_CONTENT);
 		}

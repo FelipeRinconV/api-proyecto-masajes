@@ -17,6 +17,18 @@ public class TerapeutaOuputDto {
 
 	private String profesion;
 
+	
+	
+	public TerapeutaOuputDto(long id, String cedula, String email, String nombre,
+			String profesion) {
+		super();
+		this.id = id;
+		this.cedula = cedula;
+		this.email = email;
+		this.nombre = nombre;
+		this.profesion = profesion;
+	}
+
 	public TerapeutaOuputDto() {
 		super();
 	}
