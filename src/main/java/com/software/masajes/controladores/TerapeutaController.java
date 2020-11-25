@@ -29,9 +29,11 @@ import com.software.masajes.dto.TerapeutaDto;
 import com.software.masajes.dto.TerapeutaOuputDto;
 import com.software.masajes.model.Cliente;
 import com.software.masajes.model.Terapeuta;
+import com.software.masajes.model.Terapia;
 import com.software.masajes.model.TerapiaOuputDto;
 import com.software.masajes.model.consultas.personalizadas.ClienteByTerapeuta;
 import com.software.masajes.repository.TerapeutaRepository;
+import com.software.masajes.repository.TerapiaRepository;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -40,6 +42,9 @@ public class TerapeutaController {
 
 	@Autowired
 	TerapeutaRepository terapeutaRepository;
+	
+	@Autowired
+	TerapiaRepository terapiaRepository;
 	
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -146,18 +151,27 @@ public class TerapeutaController {
 	}
 	
 	
-	@GetMapping("/terapeutas/avalaibles")
-	public ResponseEntity<List<TerapeutaOuputDto>> getTerapeutasDisponibles(String fechaInicio,String horaInicio,int duracion){
+	@GetMapping("/terapeutas/availables")
+	public ResponseEntity<List<TerapeutaOuputDto>> getTerapeutasDisponibles(String fechaEntrada,long idTerapia){
+		 
 		
+		try {
+		Optional<Terapia> terapia= terapiaRepository.findById(idTerapia);
+		
+		
+		if(terapia.isPresent()) {
+		
+		String fechaInicialCita= fechaEntrada.split("T")[0];
+		String horaInicio=fechaEntrada.split("T")[1];
 		
 		List<TerapeutaOuputDto> terapeutasDto = new ArrayList<TerapeutaOuputDto>();
 		
-		try {
+	
 
 			SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");;
-			String fechaInicioCita = fechaInicio+" "+horaInicio+":00";
-			Date fechaInicioCitaDate = formato.parse(fechaInicioCita);
-			Date fechaFinal = darFechaFinal(fechaInicioCitaDate, duracion);
+			String fechaInicioCitaCompleta = fechaInicialCita+" "+horaInicio+":00";
+			Date fechaInicioCitaDate = formato.parse(fechaInicioCitaCompleta);
+			Date fechaFinal = darFechaFinal(fechaInicioCitaDate, terapia.get().getDuracionMinutos());
 			
 			
 			TypedQuery<TerapeutaOuputDto> query= entityManager.createNamedQuery(Terapeuta.GET_TERAPEUTAS_DOSPONIBLES, TerapeutaOuputDto.class);
@@ -168,12 +182,15 @@ public class TerapeutaController {
 			terapeutasDto= query.getResultList();
 			
 			return  new ResponseEntity<List<TerapeutaOuputDto>>(terapeutasDto, HttpStatus.ACCEPTED);
-			
+		}else {
+			return  new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+		}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+			return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		
 		
 	
 		
