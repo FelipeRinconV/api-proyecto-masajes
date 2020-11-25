@@ -1,5 +1,6 @@
 package com.software.masajes.controladores;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +43,7 @@ public class ClienteController  {
 	
 
 	@GetMapping("/clientes")
-	public ResponseEntity<List<Cliente>> getAllClientes() {
+	public ResponseEntity<List<ClientDto>> getAllClientes() {
 		try {
 
 			List<Cliente> clientes = clienteRepository.findAll();
@@ -51,7 +52,7 @@ public class ClienteController  {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 
-			return new ResponseEntity<>(clientes, HttpStatus.OK);
+			return new ResponseEntity<>(convertirListaClienteAListClienteDto(clientes), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -127,7 +128,7 @@ public class ClienteController  {
 	}
 	
 	@GetMapping("/cliente/cedula/{cedula}")
-	public ResponseEntity<Cliente>  getClienteByCedula(@PathVariable("cedula") String cedula ){
+	public ResponseEntity<ClientDto>  getClienteByCedula(@PathVariable("cedula") String cedula ){
 		
 		TypedQuery<Cliente> queryClienteByCedula= entityManager.createNamedQuery(Cliente.CLIENTE_BY_CEDULA, Cliente.class);
 		queryClienteByCedula.setParameter("ce", cedula);
@@ -135,9 +136,9 @@ public class ClienteController  {
 		Cliente cliente= queryClienteByCedula.getSingleResult();
 		
 		if(cliente!=null) {
-			return new ResponseEntity<Cliente>(cliente,HttpStatus.FOUND);
+			return new ResponseEntity<ClientDto>(convertirClienteEnClientDto(cliente),HttpStatus.FOUND);
 		}else {
-			return new ResponseEntity<Cliente>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<ClientDto>(HttpStatus.NO_CONTENT);
 		}
 		
 	}
@@ -156,6 +157,21 @@ public class ClienteController  {
 		clienteDto.setOcupacion(cliente.getOcupacion());
 		
 		return clienteDto;
+		
+	}
+	
+	
+	public List<ClientDto> convertirListaClienteAListClienteDto(List<Cliente> listaClientes){
+		
+		
+		List<ClientDto> listaClientesDto = new ArrayList<ClientDto>();
+		
+		for(Cliente cliente: listaClientes) {
+			listaClientesDto.add(convertirClienteEnClientDto(cliente));
+			
+		}
+					
+		return listaClientesDto;
 		
 	}
 	
