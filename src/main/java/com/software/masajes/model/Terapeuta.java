@@ -1,6 +1,7 @@
 package com.software.masajes.model;
 
 import java.io.Serializable;
+import java.lang.annotation.Native;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -10,16 +11,25 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.NamedNativeQueries;
+import org.hibernate.annotations.NamedNativeQuery;
 
 @NamedQueries({
 
 		@NamedQuery(name = Terapeuta.LOG_TERAPEUTA, query = "select u from Terapeuta u where u.email=:email and u.clave=:clave")
 
 })
+
+//@NamedNativeQueries({
+//	//@NamedNativeQuery(name = "",query = "",resultClass = Terapeuta.class )
+//})
+
 
 @Entity
 @Table(name = "terapeutas")

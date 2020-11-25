@@ -11,9 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.software.masajes.dto.LoginDto;
 import com.software.masajes.dto.LoginOuputDto;
 import com.software.masajes.model.Secretario;
 import com.software.masajes.model.Terapeuta;
@@ -27,14 +29,17 @@ public class LoginController {
 	EntityManager em;
 
 	@GetMapping("/login")
-	public ResponseEntity<LoginOuputDto> login(String email, String clave) {
+	public ResponseEntity<LoginOuputDto> login(@RequestBody LoginDto login) {
 
+		
+		String email=login.getEmail();
+		String clave=login.getClave();
 		
 		LoginOuputDto loginRespuesta= new LoginOuputDto();
 		TypedQuery<Secretario> loginSecretario = em.createNamedQuery(Secretario.LOG_SECRETARIO, Secretario.class);
 
-		loginSecretario.setParameter("email", email);
-		loginSecretario.setParameter("clave", clave);
+		loginSecretario.setParameter("email", login.getEmail());
+		loginSecretario.setParameter("clave", login.getClave());
 
 		List<Secretario> secretarios = loginSecretario.getResultList();
 
@@ -67,7 +72,12 @@ public class LoginController {
 			}
 		}
 		
-		return new ResponseEntity<>(null, HttpStatus.OK);
+		loginRespuesta.setId(-1);
+		loginRespuesta.setEmail("");
+		loginRespuesta.setNombre("");
+		loginRespuesta.setIdentificador(-1);
+		
+		return new ResponseEntity<>(loginRespuesta, HttpStatus.OK);
 
 	}
 
