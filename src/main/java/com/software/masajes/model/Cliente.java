@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -17,6 +19,7 @@ import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -30,9 +33,23 @@ import com.software.masajes.model.consultas.personalizadas.ClienteByTerapeuta;
 
 @NamedNativeQueries({
 	@NamedNativeQuery(name = Cliente.CLIENTES_BY_TERAPEUTA, 
-			query = "SELECT  clientes.id_cliente,telefono,cedula,nombre FROM clientes  INNER JOIN citas ON clientes.id_cliente=citas.id_cliente WHERE id_terapeuta = ?")
+			query = "SELECT  clientes.id_cliente,telefono,cedula,nombre  FROM clientes  INNER JOIN citas ON clientes.id_cliente=citas.id_cliente WHERE id_terapeuta = ?  group by clientes.id_cliente",resultSetMapping = "CLIENTES_BY_TERAPEUTA_RESULT")
 	
 })
+
+@SqlResultSetMapping(
+		  name="CLIENTES_BY_TERAPEUTA_RESULT",
+		  classes = @ConstructorResult(
+				  targetClass = ClienteByTerapeuta.class,
+				  columns = {
+						  @ColumnResult(name = "clientes.id_cliente",type = Long.class),
+						  @ColumnResult(name = "telefono",type = String.class),
+						  @ColumnResult(name = "cedula",type = String.class),
+						  @ColumnResult(name = "nombre",type = String.class)
+				  }
+				  )
+		)
+
 @Entity
 @Table(name = "clientes")
 public class Cliente implements Serializable {

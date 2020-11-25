@@ -124,7 +124,7 @@ public class TerapeutaController {
 				
 		TypedQuery<ClienteByTerapeuta> query= entityManager.createNamedQuery(Cliente.CLIENTES_BY_TERAPEUTA, ClienteByTerapeuta.class);
 	
-		query.setParameter(1, idTerapeuta);
+		query.setParameter(1,idTerapeuta);
 		
 		List<ClienteByTerapeuta> listaClientes = query.getResultList();
 		

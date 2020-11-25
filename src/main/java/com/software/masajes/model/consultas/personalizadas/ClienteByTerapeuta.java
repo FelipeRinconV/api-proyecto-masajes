@@ -8,22 +8,39 @@ public class ClienteByTerapeuta implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int id;
+	private long id;
 	private String cliente;
 	private String telefono;
 	private String cedula;
-	private String nombre;
+
 	
 	
-	public ClienteByTerapeuta() {
+	
+
+	
+	public ClienteByTerapeuta(long id, String cliente, String telefono, String cedula) {
 		super();
+		this.id = id;
+		this.cliente = cliente;
+		this.telefono = telefono;
+		this.cedula = cedula;
+
 	}
-	public int getId() {
+
+
+
+	public long getId() {
 		return id;
 	}
-	public void setId(int id) {
+
+
+
+	public void setId(long id) {
 		this.id = id;
 	}
+
+
+
 	public String getCliente() {
 		return cliente;
 	}
@@ -42,12 +59,7 @@ public class ClienteByTerapeuta implements Serializable{
 	public void setCedula(String cedula) {
 		this.cedula = cedula;
 	}
-	public String getNombre() {
-		return nombre;
-	}
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+
 	
 	
 	

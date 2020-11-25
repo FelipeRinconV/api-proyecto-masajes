@@ -58,10 +58,10 @@ public class ClienteController  {
 	}
 
 	@GetMapping("/clientes/{id}")
-	public ResponseEntity<Cliente> getClienteById(@PathVariable("id") long id) {
-		Optional<Cliente> tutorialData = clienteRepository.findById(id);
-		if (tutorialData.isPresent()) {
-			return new ResponseEntity<>(tutorialData.get(), HttpStatus.OK);
+	public ResponseEntity<ClientDto> getClienteById(@PathVariable("id") long id) {
+		Optional<Cliente> cliente = clienteRepository.findById(id);
+		if (cliente.isPresent()) {
+			return new ResponseEntity<>(convertirClienteEnClientDto(cliente.get()), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -83,8 +83,8 @@ public class ClienteController  {
 			clienteNuevo.setEmail(cliente.getEmail());
 			clienteNuevo.setOcupacion(cliente.getOcupacion());
 			clienteNuevo.setTelefono(cliente.getTelefono());
+			clienteNuevo.setTelefono(cliente.getTelefono());
 			clienteNuevo.setFechaNacimiento(cliente.getFecha_nacimiento());
-
 			 clienteRepository.save(clienteNuevo);
 
 			return new ResponseEntity<>("cliente creado con exito", HttpStatus.CREATED);
@@ -140,6 +140,24 @@ public class ClienteController  {
 			return new ResponseEntity<Cliente>(HttpStatus.NO_CONTENT);
 		}
 		
+	}
+	
+	
+	public ClientDto convertirClienteEnClientDto(Cliente cliente) {
+		
+		ClientDto clienteDto = new ClientDto();
+		
+		clienteDto.setCedula(cliente.getCedula());
+		clienteDto.setDireccion(cliente.getDireccion());
+		clienteDto.setEmail(cliente.getEmail());
+		clienteDto.setFecha_nacimiento(cliente.getFechaNacimiento());
+		clienteDto.setIdSecretario((int) cliente.getSecretario().getId());
+		clienteDto.setNombre(cliente.getNombre());
+		clienteDto.setOcupacion(cliente.getOcupacion());
+		
+		return clienteDto;
 		
 	}
+	
+	
 }
