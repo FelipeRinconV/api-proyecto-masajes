@@ -5,6 +5,10 @@ public class ObservacionOuputDto {
 	
    private String observacion;
 
+public ObservacionOuputDto() {
+	super();
+}
+
 public String getObservacion() {
 	return observacion;
 }

@@ -295,7 +295,7 @@ public class CitaController {
 		   
 	   }else {
 		   
-		   return new ResponseEntity<>(observacionesDto,HttpStatus.ACCEPTED);
+		   return new ResponseEntity<>(observacionesDto,HttpStatus.OK);
 	   }
 	   
 	  
@@ -367,9 +367,7 @@ public class CitaController {
     	
     	ObservacionOuputDto observacionOuputDto = new ObservacionOuputDto();
     	
-    	
-    	observacion.setObservacion(observacion.getObservacion());
-    	
+    	observacionOuputDto.setObservacion(observacion.getObservacion());
     	
     	return observacionOuputDto;
     	
