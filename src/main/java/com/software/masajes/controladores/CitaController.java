@@ -104,7 +104,7 @@ public class CitaController {
 		}
 	}
 
-	@PostMapping("/cita/{id}")
+	@PostMapping("/cita")
 	public ResponseEntity<String> createCita(@RequestBody CitaDto citaDto) {
 		
 			Cita citaNuevo = new Cita();
