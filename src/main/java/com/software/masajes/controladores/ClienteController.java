@@ -95,8 +95,8 @@ public class ClienteController  {
 		}
 	}
 
-	@PutMapping("/clientes")
-	public ResponseEntity<String> updateCliente(@RequestBody ClientDto cliente, @PathVariable long idCleinte) {
+	@PutMapping("/clientes/{id}")
+	public ResponseEntity<String> updateCliente(@RequestBody ClientDto cliente, @PathVariable("id") long idCleinte) {
 		Optional<Cliente> clienteData = clienteRepository.findById(idCleinte);
 
 		if (clienteData.isPresent()) {
