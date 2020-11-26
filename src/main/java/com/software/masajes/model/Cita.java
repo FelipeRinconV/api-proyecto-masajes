@@ -30,7 +30,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 	
 })
 @NamedNativeQueries({
-	@NamedNativeQuery(name = Cita.LISTAR_CITAS_BY_TERAPEUTA,query = "SELECT * FROM citas WHERE citas.id_terapeuta=?",resultClass = Cita.class )
+	@NamedNativeQuery(name = Cita.LISTAR_CITAS_BY_TERAPEUTA,query = "SELECT * FROM citas WHERE citas.id_terapeuta=?",resultClass = Cita.class),
+    @NamedNativeQuery(name = Cita.LISTAR_CITAS_BY_CLIENTE,query = "SELECT * FROM citas WHERE citas.id_cliente=?",resultClass = Cita.class)
 })
 @Entity
 @Table(name = "citas")
@@ -43,6 +44,7 @@ public class Cita implements Serializable {
 
 	public static final String  LISTAR_CITAS_ORDENADAS_POR_FECHA="LISTA_FECHAS_ORDENADAS";
 	public static final String  LISTAR_CITAS_BY_TERAPEUTA="LISTA_citas_terapeutas";
+	public static final String  LISTAR_CITAS_BY_CLIENTE="LISTA_CITAS_POR_CLIENTE";
 	
 	
 	@Id

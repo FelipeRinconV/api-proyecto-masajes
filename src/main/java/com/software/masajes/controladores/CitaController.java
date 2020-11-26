@@ -319,7 +319,29 @@ public class CitaController {
 		}
 		
 	}
-
+	
+	@GetMapping("citas/cleinte/{id}")
+	public ResponseEntity<List<CitaOuputDto>> getCitasByCliente(@PathVariable("id") long idCita){
+		
+		
+		TypedQuery<Cita> query = entityManager.createNamedQuery(Cita.LISTAR_CITAS_BY_CLIENTE, Cita.class);
+		query.setParameter(1, idCita);
+	
+		List<CitaOuputDto> listaTerapeutas= covertirListaCitaAListaCitaOuputDto(query.getResultList());
+		
+		if(listaTerapeutas.isEmpty()) {
+			return new ResponseEntity<>(null,HttpStatus.NO_CONTENT);
+		}else {
+			   return new ResponseEntity<>(listaTerapeutas,HttpStatus.OK);
+ 
+		}
+		
+		
+		
+	}
+	
+   
+	
 	
 	
 	
@@ -340,6 +362,8 @@ public class CitaController {
     	citaOuputDto.setHoraFinal(cita.getFechaFinal().toString().split(" ")[1].substring(0,5));
     	citaOuputDto.setNombreProfesional(cita.getTerapeuta().getNombre());
     	citaOuputDto.setNombreCliente(cita.getCliente().getNombre());
+    	citaOuputDto.setNombreTerapia(cita.getTerapia().getNombre());
+    	
   
     	return citaOuputDto;
     	
