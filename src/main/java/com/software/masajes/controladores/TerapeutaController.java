@@ -166,7 +166,6 @@ public class TerapeutaController {
 		
 		List<TerapeutaOuputDto> terapeutasDto = new ArrayList<TerapeutaOuputDto>();
 		
-	
 
 			SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");;
 			String fechaInicioCitaCompleta = fechaInicialCita+" "+horaInicio+":00";
@@ -177,7 +176,7 @@ public class TerapeutaController {
 			TypedQuery<TerapeutaOuputDto> query= entityManager.createNamedQuery(Terapeuta.GET_TERAPEUTAS_DOSPONIBLES, TerapeutaOuputDto.class);
 			
 			query.setParameter(1, fechaInicioCitaDate.toString());
-			query.setParameter(2, fechaFinal.toString());
+			query.setParameter(2, formato.format(fechaFinal).toString());
 			query.setParameter(3, idTerapia);
 			
 			terapeutasDto= query.getResultList();

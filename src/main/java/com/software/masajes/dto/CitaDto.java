@@ -2,12 +2,8 @@ package com.software.masajes.dto;
 
 public class CitaDto {
 
-	private String fechaInicio;
-
-	private String horaInicial;
+	private String fecha;
 	
-	private int duracion;
-
 	private int idSecretario;
 
 	private int idTerapia;
@@ -16,14 +12,6 @@ public class CitaDto {
 	
 	private int idCliente;
 	
-
-	public String getFechaInicio() {
-		return fechaInicio;
-	}
-
-	public void setFechaInicio(String fechaInicio) {
-		this.fechaInicio = fechaInicio;
-	}
 
 
 	public int getIdTerapia() {
@@ -60,21 +48,16 @@ public class CitaDto {
 		this.idCliente = idCliente;
 	}
 
-	public String getHoraInicial() {
-		return horaInicial;
+	public String getFecha() {
+		return fecha;
 	}
 
-	public void setHoraInicial(String horaInicial) {
-		this.horaInicial = horaInicial;
+	public void setFecha(String fecha) {
+		this.fecha = fecha;
 	}
 
-	public int getDuracion() {
-		return duracion;
-	}
 
-	public void setDuracion(int duracion) {
-		this.duracion = duracion;
-	}
+	
 	
 	
 

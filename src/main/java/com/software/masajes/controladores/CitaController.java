@@ -106,23 +106,25 @@ public class CitaController {
 
 	@PostMapping("/cita/{id}")
 	public ResponseEntity<String> createCita(@RequestBody CitaDto citaDto) {
-		try {
-
+		
 			Cita citaNuevo = new Cita();
 		
-
 			Optional<Secretario> secre2 = secreRepository.findById((long) citaDto.getIdSecretario());
 			Optional<Terapia> terapia2 = terapiaRepository.findById((long) citaDto.getIdTerapia());
 			Optional<Terapeuta> terapeuta2 = terapeutaRepository.findById((long) citaDto.getIdTerapeuta());
 			Optional<Cliente> clienteOptional = clienteRepository.findById((long) citaDto.getIdCliente());
 			
+			
+			if(secre2.isPresent() && terapia2.isPresent() && terapeuta2.isPresent() && clienteOptional.isPresent()) {
+				
+			try {
+
 			SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			//Date fechaInicio = formato.parse(cita.getFechaInicio());
 	
-			String fechaInicioCita = citaDto.getFechaInicio()+" "+citaDto.getHoraInicial()+":00";
+			String fechaInicioCita = citaDto.getFecha().split("T")[0]+" "+ citaDto.getFecha().split("T")[1]+":00";
 			
 			Date fechaInicio = formato.parse(fechaInicioCita);
-			Date fechaFinal = darFechaFinal(fechaInicio, citaDto.getDuracion());
+			Date fechaFinal = darFechaFinal(fechaInicio, terapia2.get().getDuracionMinutos());
 			
 			citaNuevo.setSecretario(secre2.get());
 			citaNuevo.setTerapeuta(terapeuta2.get());
@@ -137,6 +139,10 @@ public class CitaController {
 		} catch (Exception e) {
 			return new ResponseEntity<>("Hubo un problema creando la cita", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		}else {
+			return new ResponseEntity<>("Algun id provisto no corresponde a una entidad", HttpStatus.INTERNAL_SERVER_ERROR);
+
+		}
 	}
 
 	private Date darFechaFinal(Date fechaInicial,int minutos) {
@@ -150,39 +156,39 @@ public class CitaController {
 		return fechaSalida;
 	}
 
-	@PutMapping("/citas/{idCita}")
-	public ResponseEntity<String> updateCita(@RequestBody CitaDto cita,@PathVariable("idCita") int idCita) throws ParseException {
-		Optional<Cita> citaData = citaRepository.findById((long) idCita);
-
-		if (citaData.isPresent()) {
-			Cita citaActualizado = citaData.get();
-
-			Optional<Secretario> secre2 = secreRepository.findById((long) cita.getIdSecretario());
-			Secretario secretario = (Secretario) secre2.get();
-
-			Optional<Terapia> terapia2 = terapiaRepository.findById((long) cita.getIdTerapia());
-			Terapia terapia = (Terapia) terapia2.get();
-
-			Optional<Terapeuta> terapeuta2 = terapeutaRepository.findById((long) cita.getIdTerapeuta());
-			Terapeuta terapeuta = (Terapeuta) terapeuta2.get();
-
-
-			SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-			Date fechaInicio = formato.parse(cita.getFechaInicio());
-			
-			citaActualizado.setSecretario(secretario);
-			citaActualizado.setTerapeuta(terapeuta);
-			citaActualizado.setTerapia(terapia);
-			citaActualizado.setFechaInicio(fechaInicio);
-		//	citaActualizado.setFechaFinal(fechaFinal);
-
-			citaRepository.save(citaActualizado);
-
-			return new ResponseEntity<>("Cita actualizada", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("La cita no se encuentra en el sistema", HttpStatus.NOT_FOUND);
-		}
-	}
+//	@PutMapping("/citas/{idCita}")
+//	public ResponseEntity<String> updateCita(@RequestBody CitaDto cita,@PathVariable("idCita") int idCita) throws ParseException {
+//		Optional<Cita> citaData = citaRepository.findById((long) idCita);
+//
+//		if (citaData.isPresent()) {
+//			Cita citaActualizado = citaData.get();
+//
+//			Optional<Secretario> secre2 = secreRepository.findById((long) cita.getIdSecretario());
+//			Secretario secretario = (Secretario) secre2.get();
+//
+//			Optional<Terapia> terapia2 = terapiaRepository.findById((long) cita.getIdTerapia());
+//			Terapia terapia = (Terapia) terapia2.get();
+//
+//			Optional<Terapeuta> terapeuta2 = terapeutaRepository.findById((long) cita.getIdTerapeuta());
+//			Terapeuta terapeuta = (Terapeuta) terapeuta2.get();
+//
+//
+//			SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+//			Date fechaInicio = formato.parse(cita.getFechaInicio());
+//			
+//			citaActualizado.setSecretario(secretario);
+//			citaActualizado.setTerapeuta(terapeuta);
+//			citaActualizado.setTerapia(terapia);
+//			citaActualizado.setFechaInicio(fechaInicio);
+//		//	citaActualizado.setFechaFinal(fechaFinal);
+//
+//			citaRepository.save(citaActualizado);
+//
+//			return new ResponseEntity<>("Cita actualizada", HttpStatus.OK);
+//		} else {
+//			return new ResponseEntity<>("La cita no se encuentra en el sistema", HttpStatus.NOT_FOUND);
+//		}
+//	}
 
 	@DeleteMapping("/citas/{id}")
 	public ResponseEntity<HttpStatus> deleteCita(@PathVariable("id") long id) {

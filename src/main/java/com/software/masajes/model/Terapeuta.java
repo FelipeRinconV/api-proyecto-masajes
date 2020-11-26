@@ -37,7 +37,7 @@ import com.software.masajes.model.consultas.personalizadas.ClienteByTerapeuta;
 			" terapeutas INNER JOIN terapia_terapeuta " + 
 			" ON terapeutas.id_terapeuta = terapia_terapeuta.id_terapeuta" + 
 			" WHERE NOT EXISTS " + 
-			" (SELECT nombre  FROM citas  WHERE  fecha_final <= ? AND  fecha_final >= ? )"
+			" (SELECT nombre  FROM citas  WHERE  fecha_final <= ? AND  fecha >= ? )"
 			+ "AND id_terapia=?;",resultSetMapping = "GET_TERAPEUTAS_DOSPONIBLES_RESULT" )
 })
 
