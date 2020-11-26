@@ -289,7 +289,7 @@ public class CitaController {
 	   
 	   List<ObservacionOuputDto> observacionesDto = convertirListaObseracionAListaOputDto(query.getResultList());
 	   
-	   if(!observacionesDto.isEmpty()) {
+	   if(observacionesDto.isEmpty()) {
 		   
 		   return new ResponseEntity<>(null,HttpStatus.NO_CONTENT);
 		   
