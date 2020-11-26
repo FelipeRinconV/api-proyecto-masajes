@@ -14,9 +14,11 @@ public class CitaOuputDto {
 	private String nombreCliente;
 	
 	private String nombreTerapia;
+	
+	private int estadoPago;
 
 	
-	
+
 	
 
 	public CitaOuputDto() {
@@ -85,6 +87,14 @@ public class CitaOuputDto {
 
 	public void setNombreTerapia(String nombreTerapia) {
 		this.nombreTerapia = nombreTerapia;
+	}
+
+	public int getEstadoPago() {
+		return estadoPago;
+	}
+
+	public void setEstadoPago(int estadoPago) {
+		this.estadoPago = estadoPago;
 	}
 
 

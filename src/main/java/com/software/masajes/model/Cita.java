@@ -142,6 +142,14 @@ public class Cita implements Serializable {
 		this.cliente = cliente;
 	}
 
+	public int getEstadoPago() {
+		return estadoPago;
+	}
+
+	public void setEstadoPago(int estadoPago) {
+		this.estadoPago = estadoPago;
+	}
+
 	
 
 }

@@ -363,6 +363,7 @@ public class CitaController {
     	citaOuputDto.setNombreProfesional(cita.getTerapeuta().getNombre());
     	citaOuputDto.setNombreCliente(cita.getCliente().getNombre());
     	citaOuputDto.setNombreTerapia(cita.getTerapia().getNombre());
+    	citaOuputDto.setEstadoPago(cita.getEstadoPago());
     	
   
     	return citaOuputDto;
@@ -370,6 +371,29 @@ public class CitaController {
     	
     }
     
+    
+    @PutMapping("cita/pagar/{id}")
+    public ResponseEntity<String> pagarCita(@PathVariable("id") long idCita) {
+    	
+    	Optional<Cita> cita= citaRepository.findById(idCita);
+    	
+    	if(cita.isPresent()) {
+    		
+    		Cita citaEncontrada = cita.get();
+    		
+    		citaEncontrada.setEstadoPago(1);
+    		
+    		citaRepository.save(citaEncontrada);
+    		
+    		return new ResponseEntity<String> ("Cita pagada correctamente",HttpStatus.OK);
+    		
+    	}else {
+    		return new ResponseEntity<String> ("No se encontro la cita con el id "+ idCita,HttpStatus.NO_CONTENT);
+    	}
+		
+    	
+    	
+    }
     
     
     public  List<CitaOuputDto> covertirListaCitaAListaCitaOuputDto(List<Cita> listaCitas){
