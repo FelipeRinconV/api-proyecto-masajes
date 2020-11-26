@@ -148,6 +148,8 @@ public class TerapiaController {
 	
 	
 	
+	
+	
 	public  TerapiaOuputDto convertirTerapiaATerapiaOuputDto(Terapia terapia) {
 		
 		TerapiaOuputDto terapiaOuputDto = new TerapiaOuputDto();

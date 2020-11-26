@@ -19,11 +19,18 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.NamedNativeQueries;
+import org.hibernate.annotations.NamedNativeQuery;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @NamedQueries({
-	 @NamedQuery(name = Cita.LISTAR_CITAS_ORDENADAS_POR_FECHA,query = "SELECT c FROM Cita c ORDER BY c.fechaInicio" )
+	 @NamedQuery(name = Cita.LISTAR_CITAS_ORDENADAS_POR_FECHA,query = "SELECT c FROM Cita c ORDER BY c.fechaInicio" ),
+	
+})
+@NamedNativeQueries({
+	@NamedNativeQuery(name = Cita.LISTAR_CITAS_BY_TERAPEUTA,query = "SELECT * FROM citas WHERE citas.id_terapeuta=?",resultClass = Cita.class )
 })
 @Entity
 @Table(name = "citas")
@@ -35,6 +42,7 @@ public class Cita implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static final String  LISTAR_CITAS_ORDENADAS_POR_FECHA="LISTA_FECHAS_ORDENADAS";
+	public static final String  LISTAR_CITAS_BY_TERAPEUTA="LISTA_citas_terapeutas";
 	
 	
 	@Id
