@@ -4,6 +4,8 @@ public class ClientDto {
 
 	private int idSecretario;
 	
+	private long id;
+	
 	private String direccion;
 
 	private String cedula;
@@ -86,6 +88,15 @@ public class ClientDto {
 		this.idSecretario = idSecretario;
 	}
 
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	
 	
 
 	

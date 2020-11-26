@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.software.masajes.dto.CitaOuputDto;
 import com.software.masajes.dto.ClientDto;
 import com.software.masajes.model.Cliente;
 import com.software.masajes.model.Secretario;
@@ -148,6 +149,7 @@ public class ClienteController  {
 		
 		ClientDto clienteDto = new ClientDto();
 		
+		clienteDto.setId(cliente.getId());
 		clienteDto.setCedula(cliente.getCedula());
 		clienteDto.setDireccion(cliente.getDireccion());
 		clienteDto.setEmail(cliente.getEmail());
