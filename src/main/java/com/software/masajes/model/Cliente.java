@@ -1,6 +1,7 @@
 package com.software.masajes.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Basic;
@@ -33,7 +34,7 @@ import com.software.masajes.model.consultas.personalizadas.ClienteByTerapeuta;
 
 @NamedNativeQueries({
 	@NamedNativeQuery(name = Cliente.CLIENTES_BY_TERAPEUTA, 
-			query = "SELECT  clientes.id_cliente,telefono,cedula,nombre  FROM clientes  INNER JOIN citas ON clientes.id_cliente=citas.id_cliente WHERE id_terapeuta = ?  group by clientes.id_cliente",resultSetMapping = "CLIENTES_BY_TERAPEUTA_RESULT")
+			query = "SELECT  clientes.id_cliente,telefono,cedula,nombre,direccion,email,ocupacion,fecha_nacimiento  FROM clientes  INNER JOIN citas ON clientes.id_cliente=citas.id_cliente WHERE id_terapeuta = ?  group by clientes.id_cliente",resultSetMapping = "CLIENTES_BY_TERAPEUTA_RESULT")
 	
 })
 
@@ -45,7 +46,11 @@ import com.software.masajes.model.consultas.personalizadas.ClienteByTerapeuta;
 						  @ColumnResult(name = "clientes.id_cliente",type = Long.class),
 						  @ColumnResult(name = "telefono",type = String.class),
 						  @ColumnResult(name = "cedula",type = String.class),
-						  @ColumnResult(name = "nombre",type = String.class)
+						  @ColumnResult(name = "nombre",type = String.class),
+						  @ColumnResult(name = "direccion",type = String.class),
+						  @ColumnResult(name = "email",type = String.class),
+						  @ColumnResult(name = "ocupacion",type = String.class),
+						  @ColumnResult(name = "fecha_nacimiento",type = Date.class)
 				  }
 				  )
 		)
