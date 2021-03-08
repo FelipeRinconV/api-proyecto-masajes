@@ -38,7 +38,13 @@ import com.software.masajes.model.consultas.personalizadas.ClienteByTerapeuta;
 			" ON terapeutas.id_terapeuta = terapia_terapeuta.id_terapeuta" + 
 			" WHERE NOT EXISTS " + 
 			" (SELECT nombre  FROM citas  WHERE  fecha_final <= ? AND  fecha >= ? )"
-			+ "AND id_terapia=?;",resultSetMapping = "GET_TERAPEUTAS_DOSPONIBLES_RESULT" )
+			+ "AND id_terapia=?;",resultSetMapping = "GET_TERAPEUTAS_DOSPONIBLES_RESULT" ),
+	
+	@NamedNativeQuery(name = Terapeuta.GET_TERAPEUTAS_DISPONIBLES_POR_TERAPIA,query = " SELECT  terapeutas.id_terapeuta,cedula,email,nombre,profesion  FROM" + 
+			" terapeutas INNER JOIN terapia_terapeuta " + 
+			" ON terapeutas.id_terapeuta = terapia_terapeuta.id_terapeuta" + 
+			" WHERE id_terapia=?;",resultSetMapping = "GET_TERAPEUTAS_DOSPONIBLES_RESULT" )
+	
 })
 
 
@@ -64,6 +70,7 @@ public class Terapeuta implements Serializable {
 
 	public static final String LOG_TERAPEUTA = "login_terapeuta";
 	public static final String GET_TERAPEUTAS_DOSPONIBLES = "terapeutas_disponibles";
+	public static final String GET_TERAPEUTAS_DISPONIBLES_POR_TERAPIA = "terapeutas_disponibles";
 
 	/**
 	 * 
